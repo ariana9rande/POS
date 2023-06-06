@@ -10,16 +10,18 @@ public class Member
 {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private String email;
     private String password;
+    private String name;
     private String role;
 
     public Member()
     {
     }
 
-    public Member(String name, String password, String role)
+    public Member(String email, String password, String name, String role)
     {
+        this.email = email;
         this.name = name;
         this.password = password;
         this.role = role;
@@ -35,14 +37,14 @@ public class Member
         this.id = id;
     }
 
-    public String getName()
+    public String getEmail()
     {
-        return name;
+        return email;
     }
 
-    public void setName(String name)
+    public void setEmail(String email)
     {
-        this.name = name;
+        this.email = email;
     }
 
     public String getPassword()
@@ -53,6 +55,16 @@ public class Member
     public void setPassword(String password)
     {
         this.password = password;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
     }
 
     public String getRole()

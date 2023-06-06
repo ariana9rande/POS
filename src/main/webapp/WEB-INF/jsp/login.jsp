@@ -1,18 +1,36 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <html>
 <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <title>로그인</title>
+    <style>
+        body {
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+        }
+    </style>
 </head>
 <body>
-<h1>로그인</h1>
-<form action="/member/login" method="post">
-    <label for="name">이름:</label>
-    <input type="text" id="name" name="name" required><br>
+<div class="container">
+    <h1 class="mt-5">로그인</h1>
+    <form action="/member/login" method="post">
+        <div class="form-group">
+            <label for="email">이메일:</label>
+            <input type="text" id="email" name="email" class="form-control" required>
+        </div>
 
-    <label for="password">비밀번호:</label>
-    <input type="password" id="password" name="password" required><br>
+        <div class="form-group">
+            <label for="password">비밀번호:</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
 
-    <input type="submit" value="로그인">
-</form>
+        <input type="submit" value="로그인" class="btn btn-primary">
+    </form>
+    <div>
+        ${loginFailed}
+    </div>
+</div>
 </body>
 </html>

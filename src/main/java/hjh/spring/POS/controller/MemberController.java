@@ -1,5 +1,6 @@
 package hjh.spring.POS.controller;
 
+import hjh.spring.POS.configuration.JavaConfig;
 import hjh.spring.POS.domain.Member;
 import hjh.spring.POS.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -34,7 +34,6 @@
         <div class="form-group">
             <label for="role">역할:</label>
             <select id="role" name="role" class="form-control" required>
-                <option value="고객">고객</option>
                 <option value="직원">직원</option>
                 <option value="매니저">매니저</option>
             </select>

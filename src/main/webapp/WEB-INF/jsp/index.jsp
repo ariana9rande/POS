@@ -5,6 +5,6 @@
 <head> <meta charset="utf-8"> </head>
 <body>
 <h1> Index Page </h1>
-<%=new SimpleDateFormat("yyyy³â MM¿ù ddÀÏ").format(new Date()) %>
+<%=new Date() %>
 </body>
 </html>

@@ -1,26 +1,48 @@
 package hjh.spring.POS.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Member
 {
-    private String id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
     private String password;
     private String role;
 
-    public Member(String id, String password, String role)
+    public Member()
     {
-        this.id = id;
+    }
+
+    public Member(String name, String password, String role)
+    {
+        this.name = name;
         this.password = password;
         this.role = role;
     }
 
-    public String getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
     }
 
     public String getPassword()

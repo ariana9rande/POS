@@ -7,10 +7,6 @@ import java.util.List;
 
 public class SaleRepositoryImpl implements SaleRepository
 {
-    private SaleRepository saleRepository;
-
-    // 생성자, setter 주입 생략
-
     @Override
     public void saveSale(Sale sale)
     {

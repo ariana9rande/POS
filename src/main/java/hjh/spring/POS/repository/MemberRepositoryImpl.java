@@ -81,25 +81,73 @@ public class MemberRepositoryImpl implements MemberRepository
     }
 
     @Override
-    public boolean checkDuplicateEmail(String email) {
+    public Member findByEmailAndPassword(String email, String password)
+    {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Member member = null;
+
+        try
+        {
+            conn = JdbcConfig.getConnection();
+            String sql = "SELECT * FROM member WHERE email = ? AND password = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, email);
+            pstmt.setString(2, password);
+            rs = pstmt.executeQuery();
+
+            if (rs.next())
+            {
+                member = new Member();
+                member.setId(rs.getLong("id"));
+                member.setEmail(rs.getString("email"));
+                member.setPassword(rs.getString("password"));
+                member.setName(rs.getString("name"));
+                member.setRole(rs.getString("role"));
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JdbcConfig.close(rs);
+            JdbcConfig.close(pstmt);
+            JdbcConfig.close(conn);
+        }
+
+        return member;
+    }
+
+    @Override
+    public boolean checkDuplicateEmail(String email)
+    {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        try {
+        try
+        {
             conn = JdbcConfig.getConnection();
             String sql = "SELECT COUNT(*) FROM member WHERE email = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, email);
             rs = pstmt.executeQuery();
 
-            if (rs.next()) {
+            if (rs.next())
+            {
                 int count = rs.getInt(1);
                 return count > 0;
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
-        } finally {
+        }
+        finally
+        {
             JdbcConfig.close(rs);
             JdbcConfig.close(pstmt);
             JdbcConfig.close(conn);

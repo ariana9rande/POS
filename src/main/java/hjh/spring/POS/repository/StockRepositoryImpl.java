@@ -4,8 +4,6 @@ import hjh.spring.POS.domain.Stock;
 
 public class StockRepositoryImpl implements StockRepository
 {
-    private StockRepository stockRepository;
-
     @Override
     public void saveStock(Stock stock)
     {

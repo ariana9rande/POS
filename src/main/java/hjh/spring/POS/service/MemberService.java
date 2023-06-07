@@ -5,7 +5,7 @@ import hjh.spring.POS.repository.MemberRepository;
 
 public class MemberService
 {
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     public MemberService(MemberRepository memberRepository)
     {
@@ -17,10 +17,9 @@ public class MemberService
         memberRepository.save(member);
     }
 
-    public boolean login(String email, String password)
+    public Member login(String email, String password)
     {
-        Member member = memberRepository.findByEmail(email);
-        return member != null && member.getPassword().equals(password);
+        return memberRepository.findByEmailAndPassword(email, password);
     }
 
     public boolean checkDuplicateEmail(String email)

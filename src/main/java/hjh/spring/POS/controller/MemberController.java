@@ -3,6 +3,7 @@ package hjh.spring.POS.controller;
 import hjh.spring.POS.configuration.JavaConfig;
 import hjh.spring.POS.domain.Member;
 import hjh.spring.POS.service.MemberService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -56,18 +57,16 @@ public class MemberController
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model)
+    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model, HttpSession session)
     {
-        boolean loginSuccess = memberService.login(email, password);
-        if (loginSuccess)
+        Member member = memberService.login(email, password);
+        if (member == null)
         {
-            return "redirect:/";
-        }
-        else
-        {
-            String message = "잘못된 email/password입니다.";
-            model.addAttribute("loginFailed", message);
+            model.addAttribute("loginFailed", "아이디 또는 비밀번호가 올바르지 않습니다.");
             return "login";
         }
+
+        session.setAttribute("loginMember", member);
+        return "redirect:/";
     }
 }

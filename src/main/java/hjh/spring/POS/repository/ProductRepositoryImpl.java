@@ -6,9 +6,6 @@ import java.util.List;
 
 public class ProductRepositoryImpl implements ProductRepository
 {
-    private ProductRepository productRepository;
-
-    // 생성자, setter 주입 생략
 
     @Override
     public void saveProduct(Product product)

@@ -4,17 +4,18 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Product Register</title>
+    <title>Add To Sell List</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
 <div class="header">
-    <h1>Product Register</h1>
+    <h1>Add To Sell List</h1>
 </div>
 <%@ include file="navbar.jsp" %>
 <div class="container">
-    <form action="/product/add" method="post">
+    <h2>Add To Sell List</h2>
+    <form action="/product/addToSellList" method="post">
         <div class="form-group">
             <label for="product">Product</label>
             <select id="product" name="productId" class="form-control" required>
@@ -28,8 +29,31 @@
             <label for="quantity">Quantity</label>
             <input type="number" id="quantity" name="quantity" class="form-control" required>
         </div>
-        <button type="submit" class="btn btn-primary">Add Stock</button>
+        <button type="submit" class="btn btn-primary">Add To Sell List</button>
     </form>
+    <a href="/product/product/sellConfirm" class="btn btn-primary">판매</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="saleItem" items="${sale.saleItems}">
+            <tr>
+                <td>${saleItem.product.name}</td>
+                <td>${saleItem.quantity}</td>
+                <td>${saleItem.product.price * saleItem.quantity}</td>
+                <td>
+<%--                    <a href="/product/removeFromSellList?saleItemId=${saleItem.id}" class="btn btn-danger">Remove</a>--%>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
+

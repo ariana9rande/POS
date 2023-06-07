@@ -3,23 +3,26 @@ package hjh.spring.POS.domain;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Sale
 {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Product product;
-    private int quantity;
+    List<SaleItem> saleItems = new ArrayList<>();
     private int totalPrice;
-    private Date date;
 
-    public Sale(Product product, int quantity, int totalPrice, Date date)
+    public Sale()
     {
-        this.product = product;
-        this.quantity = quantity;
+
+    }
+
+    public Sale(List<SaleItem> saleItems, int totalPrice)
+    {
+        this.saleItems = saleItems;
         this.totalPrice = totalPrice;
-        this.date = date;
     }
 
     public Long getId()
@@ -32,24 +35,19 @@ public class Sale
         this.id = id;
     }
 
-    public Product getProduct()
+    public List<SaleItem> getSaleItems()
     {
-        return product;
+        return saleItems;
     }
 
-    public void setProduct(Product product)
+    public void setSaleItems(List<SaleItem> saleItems)
     {
-        this.product = product;
+        this.saleItems = saleItems;
     }
 
-    public int getQuantity()
+    public void addSaleItem(SaleItem saleItem)
     {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity)
-    {
-        this.quantity = quantity;
+        saleItems.add(saleItem);
     }
 
     public int getTotalPrice()
@@ -60,15 +58,5 @@ public class Sale
     public void setTotalPrice(int totalPrice)
     {
         this.totalPrice = totalPrice;
-    }
-
-    public Date getDate()
-    {
-        return date;
-    }
-
-    public void setDate(Date date)
-    {
-        this.date = date;
     }
 }

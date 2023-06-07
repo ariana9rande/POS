@@ -1,7 +1,10 @@
 package hjh.spring.POS.controller;
 
 import hjh.spring.POS.domain.Product;
+import hjh.spring.POS.domain.Sale;
+import hjh.spring.POS.domain.SaleItem;
 import hjh.spring.POS.service.ProductService;
+import hjh.spring.POS.service.SaleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +19,12 @@ import java.util.List;
 public class ProductController
 {
     private final ProductService productService;
+    private final SaleService saleService;
 
-    public ProductController(ProductService productService)
+    public ProductController(ProductService productService, SaleService saleService)
     {
         this.productService = productService;
+        this.saleService = saleService;
     }
 
     @GetMapping("/register")
@@ -78,5 +83,56 @@ public class ProductController
         model.addAttribute("product", product);
         model.addAttribute("quantity", quantity);
         return "productAddSuccess";
+    }
+
+    @GetMapping("/sell")
+    public String productSellForm(Model model)
+    {
+        List<Product> products = productService.getAllProducts();
+        model.addAttribute("products", products);
+
+        return "sell";
+    }
+
+    @PostMapping("/addToSellList")
+    public String addToSellList(@RequestParam("productId") Long productId,
+                                @RequestParam("quantity") int quantity,
+                                Model model)
+    {
+        List<Product> products = productService.getAllProducts();
+        model.addAttribute("products", products);
+
+        Product product = productService.findProductById(productId);
+        SaleItem saleItem = new SaleItem();
+        saleItem.setProduct(product);
+        saleItem.setQuantity(quantity);
+
+        Sale sale = saleService.getCurrentSale();
+        if(sale == null)
+        {
+            sale = new Sale();
+            saleService.createSale(sale);
+        }
+
+        saleItem.setSale(sale);
+
+        sale.addSaleItem(saleItem);
+        saleService.saveSale(sale);
+        saleService.setSaleTotalPrice(sale.getId());
+        saleService.updateSale(sale);
+
+        model.addAttribute("sale", sale);
+
+        return "sell";
+    }
+
+    @GetMapping("/product/sellConfirm")
+    public String sellConfirm(Model model)
+    {
+        Sale sale = saleService.getCurrentSale();
+
+        model.addAttribute("sale", sale);
+
+        return "sellConfirm";
     }
 }

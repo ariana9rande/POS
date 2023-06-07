@@ -50,6 +50,12 @@ public class JavaConfig
         return new ProductService(productRepository);
     }
 
+//    @Bean
+//    public ProductController productController(ProductService productService)
+//    {
+//        return new ProductController(productService);
+//    }
+
     // 다른 의존성을 등록하는 코드 작성
     // ...
 }

@@ -1,20 +1,21 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <title>Product Register</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-    <title>회원 가입 성공</title>
 </head>
 <body>
 <div class="header">
-    <h1>회원 가입 성공</h1>
+    <h1>상품 등록 완료</h1>
 </div>
 <%@ include file="navbar.jsp" %>
 <div class="container">
-    <div>
-        <h3>${member.name}님, 환영합니다.</h3>
-    </div>
+    <h1>${product.name} 등록 완료</h1>
+    <h3>가격 : ${product.price} 개수 : ${product.stock}</h3>
 </div>
 </body>
 </html>

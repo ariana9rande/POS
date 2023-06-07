@@ -10,5 +10,5 @@ public interface ProductRepository
 
     Product findProductById(Long id);
 
-    List<Product> getAllProducts();
+    List<Product> findAllProducts();
 }

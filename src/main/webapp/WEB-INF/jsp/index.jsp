@@ -17,22 +17,7 @@
         <div class="navbar-user">Welcome, ${sessionScope.loginMember.name}</div>
     </c:if>
 </div>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">POS System</a>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/product/register">상품 등록</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">재고 관리</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">통계</a>
-            </li>
-        </ul>
-    </div>
-</nav>
+<%@ include file="navbar.jsp" %>
 <div class="container">
     <p>Current Time: <%= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) %>
     </p>

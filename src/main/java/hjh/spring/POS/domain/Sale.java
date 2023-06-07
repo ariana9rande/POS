@@ -3,6 +3,7 @@ package hjh.spring.POS.domain;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Date;
 
 public class Sale
 {
@@ -11,12 +12,14 @@ public class Sale
     private Product product;
     private int quantity;
     private int totalPrice;
+    private Date date;
 
-    public Sale(Product product, int quantity, int totalPrice)
+    public Sale(Product product, int quantity, int totalPrice, Date date)
     {
         this.product = product;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
+        this.date = date;
     }
 
     public Long getId()
@@ -57,5 +60,15 @@ public class Sale
     public void setTotalPrice(int totalPrice)
     {
         this.totalPrice = totalPrice;
+    }
+
+    public Date getDate()
+    {
+        return date;
+    }
+
+    public void setDate(Date date)
+    {
+        this.date = date;
     }
 }

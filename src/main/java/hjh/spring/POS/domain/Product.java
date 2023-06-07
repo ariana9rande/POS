@@ -1,26 +1,32 @@
 package hjh.spring.POS.domain;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 public class Product
 {
-    private String code;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
     private String name;
     private int price;
+    private int stock;
 
-    public Product(String code, String name, int price)
+    public Product(String name, int price, int stock)
     {
-        this.code = code;
         this.name = name;
         this.price = price;
+        this.stock = stock;
     }
 
-    public String getCode()
+    public String getId()
     {
-        return code;
+        return id;
     }
 
-    public void setCode(String code)
+    public void setId(String id)
     {
-        this.code = code;
+        this.id = id;
     }
 
     public String getName()
@@ -41,5 +47,15 @@ public class Product
     public void setPrice(int price)
     {
         this.price = price;
+    }
+
+    public int getStock()
+    {
+        return stock;
+    }
+
+    public void setStock(int stock)
+    {
+        this.stock = stock;
     }
 }

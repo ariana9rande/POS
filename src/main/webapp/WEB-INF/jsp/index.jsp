@@ -8,61 +8,7 @@
     <meta charset="UTF-8">
     <title>Index Page</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .container {
-            max-width: 600px;
-            margin-top: 50px;
-        }
-
-        h1 {
-            margin-bottom: 30px;
-            color: #333;
-        }
-
-        p {
-            margin-bottom: 20px;
-            color: #777;
-        }
-
-        .btn-group {
-            margin-top: 30px;
-            text-align: center;
-        }
-
-        .btn {
-            margin-right: 10px;
-        }
-
-        .navbar {
-            margin-bottom: 20px;
-            background-color: #333;
-        }
-
-        .navbar-brand {
-            font-size: 20px;
-            font-weight: bold;
-            color: #fff;
-        }
-
-        .navbar-user {
-            font-size: 16px;
-            font-weight: bold;
-            color: #fff;
-            margin-top: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
 <div class="header">
@@ -74,7 +20,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/">POS System</a>
     <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav mx-auto">
+        <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" href="/product/register">상품 등록</a>
             </li>

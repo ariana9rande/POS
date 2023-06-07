@@ -58,4 +58,25 @@ public class ProductController
 
         return "products";
     }
+
+    @GetMapping("/add")
+    public String productAddForm(Model model)
+    {
+        List<Product> products = productService.getAllProducts();
+        model.addAttribute("products", products);
+
+        return "productAdd";
+    }
+
+    @PostMapping("/add")
+    public String productAdd(@RequestParam("productId") Long productId,
+                             @RequestParam("quantity") int quantity,
+                             Model model)
+    {
+        productService.addProductStock(productId, quantity);
+        Product product = productService.findProductById(productId);
+        model.addAttribute("product", product);
+        model.addAttribute("quantity", quantity);
+        return "productAddSuccess";
+    }
 }

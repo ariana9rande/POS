@@ -7,7 +7,10 @@
                 <a class="nav-link" href="/product/register">상품 등록</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">재고 관리</a>
+                <a class="nav-link" href="/product/add">입고</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/product/products">상품 목록</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">통계</a>

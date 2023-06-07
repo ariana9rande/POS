@@ -29,5 +29,4 @@ public class MemberService
     {
         return memberRepository.checkDuplicateEmail(email);
     }
-
 }

@@ -12,7 +12,7 @@
 </head>
 <body>
 <div class="header">
-    <h1>Welcome</h1>
+    <h1>Web POS System</h1>
     <c:if test="${sessionScope.loginMember != null}">
         <div class="navbar-user">Welcome, ${sessionScope.loginMember.name}</div>
     </c:if>

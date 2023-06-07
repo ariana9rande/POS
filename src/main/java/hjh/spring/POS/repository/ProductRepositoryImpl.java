@@ -4,6 +4,7 @@ import hjh.spring.POS.configuration.JdbcConfig;
 import hjh.spring.POS.domain.Member;
 import hjh.spring.POS.domain.Product;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,24 +44,60 @@ public class ProductRepositoryImpl implements ProductRepository
     @Override
     public Product findProductById(Long id)
     {
-        return null;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Product product = null;
+
+        try
+        {
+            conn = JdbcConfig.getConnection();
+            String sql = "SELECT * FROM product WHERE id = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setLong(1, id);
+            rs = pstmt.executeQuery();
+
+            if (rs.next())
+            {
+                product = new Product();
+                product.setId(rs.getLong("id"));
+                product.setName(rs.getString("name"));
+                product.setPrice(rs.getInt("price"));
+                product.setStock(rs.getInt("stock"));
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JdbcConfig.close(rs);
+            JdbcConfig.close(pstmt);
+            JdbcConfig.close(conn);
+        }
+
+        return product;
     }
 
     @Override
-    public List<Product> findAllProducts() {
+    public List<Product> findAllProducts()
+    {
         List<Product> productList = new ArrayList<>();
 
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        try {
+        try
+        {
             conn = JdbcConfig.getConnection();
             String sql = "SELECT * FROM product";
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
 
-            while (rs.next()) {
+            while (rs.next())
+            {
                 Product product = new Product();
                 product.setId(rs.getLong("id"));
                 product.setName(rs.getString("name"));
@@ -69,9 +106,13 @@ public class ProductRepositoryImpl implements ProductRepository
 
                 productList.add(product);
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
-        } finally {
+        }
+        finally
+        {
             JdbcConfig.close(rs);
             JdbcConfig.close(pstmt);
             JdbcConfig.close(conn);
@@ -80,6 +121,30 @@ public class ProductRepositoryImpl implements ProductRepository
         return productList;
     }
 
+    public void addStock(Long id, int quantity)
+    {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
 
-    // 기타 필요한 메서드 작성
+        try
+        {
+            conn = JdbcConfig.getConnection();
+            String sql = "UPDATE product SET stock = stock + ? WHERE id = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, quantity);
+            pstmt.setLong(2, id);
+
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JdbcConfig.close(pstmt);
+            JdbcConfig.close(conn);
+        }
+    }
 }

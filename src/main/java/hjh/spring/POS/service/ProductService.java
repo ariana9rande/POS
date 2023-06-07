@@ -15,6 +15,11 @@ public class ProductService
         this.productRepository = productRepository;
     }
 
+    public Product findProductById(Long id)
+    {
+        return productRepository.findProductById(id);
+    }
+
     public void registerProduct(Product product)
     {
         productRepository.save(product);
@@ -23,5 +28,10 @@ public class ProductService
     public List<Product> getAllProducts()
     {
         return productRepository.findAllProducts();
+    }
+
+    public void addProductStock(Long id, int quantity)
+    {
+        productRepository.addStock(id, quantity);
     }
 }

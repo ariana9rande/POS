@@ -11,4 +11,6 @@ public interface ProductRepository
     Product findProductById(Long id);
 
     List<Product> findAllProducts();
+
+    void addStock(Long id, int quantity);
 }

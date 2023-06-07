@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="header">
-    <h1>상품 등록 완료</h1>
+    <h1>상품 목록</h1>
 </div>
 <%@ include file="navbar.jsp" %>
 <div class="container">

@@ -7,10 +7,15 @@ import javax.persistence.Id;
 public class Product
 {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
     private String name;
     private int price;
     private int stock;
+
+    public Product()
+    {
+
+    }
 
     public Product(String name, int price, int stock)
     {
@@ -19,12 +24,12 @@ public class Product
         this.stock = stock;
     }
 
-    public String getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
     }

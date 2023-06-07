@@ -4,13 +4,13 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Product Management</title>
+    <title>Product Register</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
 <div class="header">
-    <h1>Product Management</h1>
+    <h1>Product Register</h1>
 </div>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/">POS System</a>
@@ -39,8 +39,8 @@
             <input type="number" id="price" name="price" class="form-control" required>
         </div>
         <div class="form-group">
-            <label for="quantity">Quantity</label>
-            <input type="number" id="quantity" name="quantity" class="form-control" required>
+            <label for="stock">Quantity</label>
+            <input type="number" id="stock" name="stock" class="form-control" required>
         </div>
         <div class="btn-group">
             <button type="submit" class="btn btn-primary">Register</button>

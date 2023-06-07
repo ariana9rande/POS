@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface ProductRepository
 {
-    void saveProduct(Product product);
+    void save(Product product);
 
-    Product findProductByCode(String code);
+    Product findProductById(Long id);
 
     List<Product> getAllProducts();
 }

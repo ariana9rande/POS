@@ -16,13 +16,30 @@ public class Sale
 
     public Sale()
     {
-
+        this.saleItems = new ArrayList<>();
+        this.totalPrice = 0;
     }
 
     public Sale(List<SaleItem> saleItems, int totalPrice)
     {
         this.saleItems = saleItems;
         this.totalPrice = totalPrice;
+    }
+
+    public void addSaleItem(SaleItem saleItem)
+    {
+        saleItems.add(saleItem);
+    }
+
+    public int calculateTotalPrice()
+    {
+        int total = 0;
+        for (SaleItem saleItem : saleItems)
+        {
+            total += saleItem.getProduct().getPrice() * saleItem.getQuantity();
+        }
+        totalPrice = total;
+        return totalPrice;
     }
 
     public Long getId()
@@ -43,11 +60,6 @@ public class Sale
     public void setSaleItems(List<SaleItem> saleItems)
     {
         this.saleItems = saleItems;
-    }
-
-    public void addSaleItem(SaleItem saleItem)
-    {
-        saleItems.add(saleItem);
     }
 
     public int getTotalPrice()

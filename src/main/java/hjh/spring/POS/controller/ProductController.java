@@ -5,6 +5,7 @@ import hjh.spring.POS.domain.Sale;
 import hjh.spring.POS.domain.SaleItem;
 import hjh.spring.POS.service.ProductService;
 import hjh.spring.POS.service.SaleService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -86,50 +87,86 @@ public class ProductController
     }
 
     @GetMapping("/sell")
-    public String productSellForm(Model model)
+    public String productSellForm(Model model, HttpSession session)
     {
+        // Sale 객체 생성
+        Sale sale = new Sale();
+        saleService.saveSale(sale);
+
         List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
+
+        // Sale 객체를 세션에 저장
+        session.setAttribute("sale", sale);
 
         return "sell";
     }
 
+
     @PostMapping("/addToSellList")
     public String addToSellList(@RequestParam("productId") Long productId,
                                 @RequestParam("quantity") int quantity,
+                                HttpSession session,
                                 Model model)
     {
+
+        // 세션에서 Sale 객체 가져오기
+        Sale sale = (Sale) session.getAttribute("sale");
+
+        // Sale 객체가 없을 경우 새로 생성
+        if (sale == null)
+        {
+            sale = new Sale();
+            session.setAttribute("sale", sale);
+        }
+
+        // 상품 정보 가져오기
+        Product product = productService.findProductById(productId);
+
+        boolean saleItemExists = false;
+        for (SaleItem saleItem : sale.getSaleItems())
+        {
+            if (saleItem.getProduct().getId().equals(productId))
+            {
+                // 이미 같은 상품을 가지는 SaleItem이 있을 경우 수량 업데이트
+                saleItem.setQuantity(saleItem.getQuantity() + quantity);
+                saleService.updateSaleItem(saleItem);
+                saleItemExists = true;
+                break;
+            }
+        }
+
+        // SaleItem이 없을 경우 새로 생성
+        if (!saleItemExists)
+        {
+            SaleItem saleItem = new SaleItem();
+            saleItem.setSale(sale);
+            saleItem.setProduct(product);
+            saleItem.setQuantity(quantity);
+            saleService.saveSaleItem(saleItem, sale.getId());
+
+            // Sale 객체에 SaleItem 추가
+            sale.addSaleItem(saleItem);
+        }
+
+        sale.calculateTotalPrice();
+        saleService.updateSale(sale);
+
+        // 모델에 상품 목록 추가
         List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
 
-        Product product = productService.findProductById(productId);
-        SaleItem saleItem = new SaleItem();
-        saleItem.setProduct(product);
-        saleItem.setQuantity(quantity);
-
-        Sale sale = saleService.getCurrentSale();
-        System.out.println("sale = " + sale);
-        if(sale == null)
-        {
-            sale = new Sale();
-            saleService.createSale(sale);
-        }
-        System.out.println("sale = " + sale);
-        saleItem.setSale(sale);
-
-        sale.addSaleItem(saleItem);
-        saleService.saveSale();
-        saleService.setSaleTotalPrice(sale.getId());
-
+        // 모델에 Sale 객체 추가
         model.addAttribute("sale", sale);
 
         return "sell";
     }
 
-    @GetMapping("/product/sellConfirm")
-    public String sellConfirm(Model model)
+
+    @GetMapping("/sellConfirm")
+    public String sellConfirm(HttpSession session, Model model)
     {
-        Sale sale = saleService.getCurrentSale();
+        Sale sale = (Sale) session.getAttribute("sale");
 
         model.addAttribute("sale", sale);
 

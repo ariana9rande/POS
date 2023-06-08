@@ -53,6 +53,15 @@
         </c:forEach>
         </tbody>
     </table>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Total Price</th>
+                <th></th>
+                <th>${sale.totalPrice}</th>
+            </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>

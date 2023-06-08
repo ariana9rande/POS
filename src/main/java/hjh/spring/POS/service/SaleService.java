@@ -8,61 +8,29 @@ import org.springframework.stereotype.Service;
 public class SaleService
 {
     private final SaleRepository saleRepository;
-    private Sale currentSale;
 
     public SaleService(SaleRepository saleRepository)
     {
         this.saleRepository = saleRepository;
     }
 
-    // 현재 판매 객체 가져오기
-    public Sale getCurrentSale()
+    public void saveSale(Sale sale)
     {
-        if (currentSale == null)
-        {
-            currentSale = new Sale();
-        }
-        return currentSale;
+        saleRepository.saveSale(sale);
     }
 
-
-    // 판매 객체 생성
-    public void createSale(Sale sale)
+    public void saveSaleItem(SaleItem saleItem, Long saleId)
     {
-        currentSale = sale;
+        saleRepository.saveSaleItem(saleItem, saleId);
     }
 
-    // 판매 아이템을 판매 객체에 추가
-    public void addSaleItem(SaleItem saleItem)
+    public void updateSale(Sale sale)
     {
-        if (currentSale != null)
-        {
-            currentSale.addSaleItem(saleItem);
-        }
+        saleRepository.updateSale(sale);
     }
 
-    // 판매 객체 업데이트
-    public void saveSale()
+    public void updateSaleItem(SaleItem saleItem)
     {
-        if (currentSale != null)
-        {
-            saleRepository.saveSale(currentSale);
-        }
-        currentSale = null;
-    }
-
-//    public void updateSale()
-//    {
-//        if (currentSale != null)
-//        {
-//            saleRepository.updateSale(currentSale);
-//        }
-//    }
-
-    public void setSaleTotalPrice(Long saleId)
-    {
-        int totalPrice = saleRepository.calculateTotalPrice(saleId);
-//        saleRepository.setSaleTotalPrice(saleId, totalPrice);
-        saleRepository.setTotalPrice(currentSale, totalPrice);
+        saleRepository.updateSaleItem(saleItem);
     }
 }

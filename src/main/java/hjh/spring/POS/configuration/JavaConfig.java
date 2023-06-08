@@ -1,7 +1,5 @@
 package hjh.spring.POS.configuration;
 
-import hjh.spring.POS.controller.MemberController;
-import hjh.spring.POS.controller.ProductController;
 import hjh.spring.POS.repository.*;
 import hjh.spring.POS.service.MemberService;
 import hjh.spring.POS.service.ProductService;
@@ -9,7 +7,6 @@ import hjh.spring.POS.service.SaleService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @ComponentScan(basePackages = "hjh.spring.POS")
@@ -55,9 +52,9 @@ public class JavaConfig
 //    }
 
     @Bean
-    public SaleRepository saleRepository()
+    public SaleRepository saleRepository(ProductService productService)
     {
-        return new SaleRepositoryImpl();
+        return new SaleRepositoryImpl(productService);
     }
 
     @Bean

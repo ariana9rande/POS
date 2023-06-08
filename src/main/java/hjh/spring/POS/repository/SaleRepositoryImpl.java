@@ -3,13 +3,19 @@ package hjh.spring.POS.repository;
 import hjh.spring.POS.configuration.JdbcConfig;
 import hjh.spring.POS.domain.Sale;
 import hjh.spring.POS.domain.SaleItem;
+import hjh.spring.POS.service.ProductService;
 
 import java.sql.*;
-import java.util.Date;
-import java.util.List;
 
 public class SaleRepositoryImpl implements SaleRepository
 {
+    private final ProductService productService;
+
+    public SaleRepositoryImpl(ProductService productService)
+    {
+        this.productService = productService;
+    }
+
     @Override
     public void saveSale(Sale sale)
     {
@@ -22,21 +28,20 @@ public class SaleRepositoryImpl implements SaleRepository
             String sql = "INSERT INTO sale (total_price) VALUES (?)";
             pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, sale.getTotalPrice());
-
             pstmt.executeUpdate();
 
-            // Sale ID 가져오기
+            // 생성된 Sale의 ID 가져오기
             ResultSet generatedKeys = pstmt.getGeneratedKeys();
             if (generatedKeys.next())
             {
                 long saleId = generatedKeys.getLong(1);
                 sale.setId(saleId);
+            }
 
-                // SaleItem 저장
-                for (SaleItem saleItem : sale.getSaleItems())
-                {
-                    saveSaleItem(saleItem, saleId, conn);
-                }
+            // SaleItem을 저장
+            for (SaleItem saleItem : sale.getSaleItems())
+            {
+                saveSaleItem(saleItem, sale.getId());
             }
         }
         catch (SQLException e)
@@ -51,28 +56,7 @@ public class SaleRepositoryImpl implements SaleRepository
     }
 
     @Override
-    public void saveSaleItem(SaleItem saleItem, long saleId, Connection conn) throws SQLException
-    {
-        PreparedStatement pstmt = null;
-
-        try
-        {
-            String sql = "INSERT INTO sale_item (sale_id, product_id, quantity) VALUES (?, ?, ?)";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setLong(1, saleId);
-            pstmt.setLong(2, saleItem.getProduct().getId());
-            pstmt.setInt(3, saleItem.getQuantity());
-
-            pstmt.executeUpdate();
-        }
-        finally
-        {
-            JdbcConfig.close(pstmt);
-        }
-    }
-
-    @Override
-    public void setTotalPrice(Sale sale, int totalPrice)
+    public void saveSaleItem(SaleItem saleItem, long saleId)
     {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -80,12 +64,11 @@ public class SaleRepositoryImpl implements SaleRepository
         try
         {
             conn = JdbcConfig.getConnection();
-            String sql = "UPDATE sale SET total_price = ? WHERE id = ?";
+            String sql = "INSERT INTO sale_item (sale_id, product_id, quantity) VALUES (?, ?, ?)";
             pstmt = conn.prepareStatement(sql);
-            totalPrice = calculateTotalPrice(sale.getId());
-            pstmt.setInt(1, totalPrice);
-            pstmt.setLong(2, sale.getId());
-
+            pstmt.setLong(1, saleId);
+            pstmt.setLong(2, saleItem.getProduct().getId());
+            pstmt.setInt(3, saleItem.getQuantity());
             pstmt.executeUpdate();
         }
         catch (SQLException e)
@@ -99,36 +82,79 @@ public class SaleRepositoryImpl implements SaleRepository
         }
     }
 
-
     @Override
-    public List<Sale> getSalesByDateRange(Date startDate, Date endDate)
-    {
-        // 날짜 범위에 해당하는 판매 내역 조회 로직 작성
-        return null;
-    }
-
-    @Override
-    public int calculateTotalPrice(Long saleId)
+    public void updateSale(Sale sale)
     {
         Connection conn = null;
         PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        int totalPrice = 0;
 
         try
         {
             conn = JdbcConfig.getConnection();
-            String sql = "SELECT SUM(si.quantity * p.price) AS total_price " +
-                    "FROM sale_item si " +
-                    "JOIN product p ON si.product_id = p.id " +
-                    "WHERE si.sale_id = ?";
+            String sql = "UPDATE sale SET total_price = ? WHERE id = ?";
             pstmt = conn.prepareStatement(sql);
-            pstmt.setLong(1, saleId);
+            pstmt.setInt(1, sale.getTotalPrice());
+            pstmt.setLong(2, sale.getId());
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JdbcConfig.close(pstmt);
+            JdbcConfig.close(conn);
+        }
+    }
 
+    public void updateSaleItem(SaleItem saleItem)
+    {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try
+        {
+            conn = JdbcConfig.getConnection();
+            String sql = "UPDATE sale_item SET quantity = ? WHERE product_id = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, saleItem.getQuantity());
+            pstmt.setLong(2, saleItem.getProduct().getId());
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JdbcConfig.close(pstmt);
+            JdbcConfig.close(conn);
+        }
+    }
+
+    @Override
+    public SaleItem findSaleItemById(Long saleItemId)
+    {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        SaleItem saleItem = null;
+
+        try
+        {
+            conn = JdbcConfig.getConnection();
+            String sql = "SELECT * FROM sale_item WHERE id = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setLong(1, saleItemId);
             rs = pstmt.executeQuery();
+
             if (rs.next())
             {
-                totalPrice = rs.getInt("total_price");
+                saleItem = new SaleItem();
+                saleItem.setId(rs.getLong("id"));
+                saleItem.setProduct(productService.findProductById(rs.getLong("product_id")));
+                saleItem.setQuantity(rs.getInt("quantity"));
             }
         }
         catch (SQLException e)
@@ -142,33 +168,6 @@ public class SaleRepositoryImpl implements SaleRepository
             JdbcConfig.close(conn);
         }
 
-        return totalPrice;
+        return saleItem;
     }
-
-//    @Override
-//    public void setSaleTotalPrice(Long saleId, int totalPrice)
-//    {
-//        Connection conn = null;
-//        PreparedStatement pstmt = null;
-//
-//        try
-//        {
-//            conn = JdbcConfig.getConnection();
-//            String sql = "UPDATE sale SET total_price = ? WHERE id = ?";
-//            pstmt = conn.prepareStatement(sql);
-//            pstmt.setInt(1, totalPrice);
-//            pstmt.setLong(2, saleId);
-//
-//            pstmt.executeUpdate();
-//        }
-//        catch (SQLException e)
-//        {
-//            e.printStackTrace();
-//        }
-//        finally
-//        {
-//            JdbcConfig.close(pstmt);
-//            JdbcConfig.close(conn);
-//        }
-//    }
 }

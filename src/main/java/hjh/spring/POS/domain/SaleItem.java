@@ -4,19 +4,31 @@ import javax.persistence.*;
 
 public class SaleItem
 {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private Sale sale;
     private Product product;
     private int quantity;
+
+    public SaleItem(Product product, int quantity)
+    {
+        this.product = product;
+        this.quantity = quantity;
+    }
 
     public SaleItem()
     {
 
     }
 
-    public SaleItem(Product product, int quantity)
+    public Long getId()
     {
-        this.product = product;
-        this.quantity = quantity;
+        return id;
+    }
+
+    public void setId(Long id)
+    {
+        this.id = id;
     }
 
     public Sale getSale()

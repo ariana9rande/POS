@@ -12,14 +12,13 @@ public interface SaleRepository
 {
     void saveSale(Sale sale);
 
-    void setTotalPrice(Sale sale, int totalPrice);
+    void saveSaleItem(SaleItem saleItem, long saleId);
 
-    void saveSaleItem(SaleItem saleItem, long saleId, Connection conn) throws SQLException;
+    void updateSale(Sale sale);
 
-    List<Sale> getSalesByDateRange(Date startDate, Date endDate);
+    void updateSaleItem(SaleItem saleItem);
 
-    int calculateTotalPrice(Long saleId);
+    SaleItem findSaleItemById(Long saleItemId);
 
-//    void setSaleTotalPrice(Long saleId, int totalPrice);
 
 }

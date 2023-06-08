@@ -31,7 +31,7 @@
         </div>
         <button type="submit" class="btn btn-primary">Add To Sell List</button>
     </form>
-    <a href="/product/product/sellConfirm" class="btn btn-primary">판매</a>
+    <a href="/product/sellConfirm" class="btn btn-primary">판매</a>
     <table class="table">
         <thead>
         <tr>

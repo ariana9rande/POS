@@ -18,13 +18,18 @@ public class SaleService
     // 현재 판매 객체 가져오기
     public Sale getCurrentSale()
     {
+        if (currentSale == null)
+        {
+            currentSale = new Sale();
+        }
         return currentSale;
     }
+
 
     // 판매 객체 생성
     public void createSale(Sale sale)
     {
-        this.currentSale = sale;
+        currentSale = sale;
     }
 
     // 판매 아이템을 판매 객체에 추가
@@ -37,19 +42,27 @@ public class SaleService
     }
 
     // 판매 객체 업데이트
-    public void saveSale(Sale sale)
+    public void saveSale()
     {
-        saleRepository.saveSale(sale);
+        if (currentSale != null)
+        {
+            saleRepository.saveSale(currentSale);
+        }
+        currentSale = null;
     }
 
-    public void updateSale(Sale sale)
-    {
-        saleRepository.updateSale(sale);
-    }
+//    public void updateSale()
+//    {
+//        if (currentSale != null)
+//        {
+//            saleRepository.updateSale(currentSale);
+//        }
+//    }
 
     public void setSaleTotalPrice(Long saleId)
     {
         int totalPrice = saleRepository.calculateTotalPrice(saleId);
-        saleRepository.updateSaleTotalPrice(saleId, totalPrice);
+//        saleRepository.setSaleTotalPrice(saleId, totalPrice);
+        saleRepository.setTotalPrice(currentSale, totalPrice);
     }
 }

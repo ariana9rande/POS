@@ -108,18 +108,18 @@ public class ProductController
         saleItem.setQuantity(quantity);
 
         Sale sale = saleService.getCurrentSale();
+        System.out.println("sale = " + sale);
         if(sale == null)
         {
             sale = new Sale();
             saleService.createSale(sale);
         }
-
+        System.out.println("sale = " + sale);
         saleItem.setSale(sale);
 
         sale.addSaleItem(saleItem);
-        saleService.saveSale(sale);
+        saleService.saveSale();
         saleService.setSaleTotalPrice(sale.getId());
-        saleService.updateSale(sale);
 
         model.addAttribute("sale", sale);
 

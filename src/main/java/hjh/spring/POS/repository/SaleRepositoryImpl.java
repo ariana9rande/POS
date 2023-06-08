@@ -19,7 +19,7 @@ public class SaleRepositoryImpl implements SaleRepository
         try
         {
             conn = JdbcConfig.getConnection();
-            String sql = "INSERT INTO sale (total_price) VALUES ( ?)";
+            String sql = "INSERT INTO sale (total_price) VALUES (?)";
             pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, sale.getTotalPrice());
 
@@ -38,7 +38,6 @@ public class SaleRepositoryImpl implements SaleRepository
                     saveSaleItem(saleItem, saleId, conn);
                 }
             }
-
         }
         catch (SQLException e)
         {
@@ -73,7 +72,7 @@ public class SaleRepositoryImpl implements SaleRepository
     }
 
     @Override
-    public void updateSale(Sale sale)
+    public void setTotalPrice(Sale sale, int totalPrice)
     {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -83,7 +82,8 @@ public class SaleRepositoryImpl implements SaleRepository
             conn = JdbcConfig.getConnection();
             String sql = "UPDATE sale SET total_price = ? WHERE id = ?";
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, sale.getTotalPrice());
+            totalPrice = calculateTotalPrice(sale.getId());
+            pstmt.setInt(1, totalPrice);
             pstmt.setLong(2, sale.getId());
 
             pstmt.executeUpdate();
@@ -145,32 +145,30 @@ public class SaleRepositoryImpl implements SaleRepository
         return totalPrice;
     }
 
-    @Override
-    public void updateSaleTotalPrice(Long saleId, int totalPrice)
-    {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-
-        try
-        {
-            conn = JdbcConfig.getConnection();
-            String sql = "UPDATE sale SET total_price = ? WHERE id = ?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, totalPrice);
-            pstmt.setLong(2, saleId);
-
-            pstmt.executeUpdate();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            JdbcConfig.close(pstmt);
-            JdbcConfig.close(conn);
-        }
-    }
-
-
+//    @Override
+//    public void setSaleTotalPrice(Long saleId, int totalPrice)
+//    {
+//        Connection conn = null;
+//        PreparedStatement pstmt = null;
+//
+//        try
+//        {
+//            conn = JdbcConfig.getConnection();
+//            String sql = "UPDATE sale SET total_price = ? WHERE id = ?";
+//            pstmt = conn.prepareStatement(sql);
+//            pstmt.setInt(1, totalPrice);
+//            pstmt.setLong(2, saleId);
+//
+//            pstmt.executeUpdate();
+//        }
+//        catch (SQLException e)
+//        {
+//            e.printStackTrace();
+//        }
+//        finally
+//        {
+//            JdbcConfig.close(pstmt);
+//            JdbcConfig.close(conn);
+//        }
+//    }
 }

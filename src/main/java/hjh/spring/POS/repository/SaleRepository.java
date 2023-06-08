@@ -12,7 +12,7 @@ public interface SaleRepository
 {
     void saveSale(Sale sale);
 
-    void updateSale(Sale sale);
+    void setTotalPrice(Sale sale, int totalPrice);
 
     void saveSaleItem(SaleItem saleItem, long saleId, Connection conn) throws SQLException;
 
@@ -20,5 +20,6 @@ public interface SaleRepository
 
     int calculateTotalPrice(Long saleId);
 
-    void updateSaleTotalPrice(Long saleId, int totalPrice);
+//    void setSaleTotalPrice(Long saleId, int totalPrice);
+
 }

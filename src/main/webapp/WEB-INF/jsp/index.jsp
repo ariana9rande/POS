@@ -19,12 +19,23 @@
 </div>
 <%@ include file="navbar.jsp" %>
 <div class="container">
-    <p>Current Time: <%= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) %>
-    </p>
-    <div class="btn-group">
-        <a href="/member/join" class="btn btn-primary">회원 가입</a>
-        <a href="/member/login" class="btn btn-primary">로그인</a>
+    <h3 id="currentTime">Current Time: </h3>
+    <div class="row justify-content-center">
+        <div class="btn-group">
+            <a href="/member/join" class="btn btn-dark">회원 가입</a>
+            <a href="/member/login" class="btn btn-dark">로그인</a>
+        </div>
     </div>
 </div>
+<script>
+    function updateCurrentTime() {
+        var currentTimeElement = document.getElementById("currentTime");
+        var currentTime = new Date();
+        currentTimeElement.innerHTML = "Current Time: " + currentTime.toLocaleString();
+    }
+
+    // 매 초마다 현재 시간 업데이트
+    setInterval(updateCurrentTime, 1000);
+</script>
 </body>
 </html>

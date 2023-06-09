@@ -11,17 +11,19 @@ public class Product
     private String name;
     private int price;
     private int stock;
+    private int purchasePrice;
 
     public Product()
     {
 
     }
 
-    public Product(String name, int price, int stock)
+    public Product(String name, int price, int stock, int purchasePrice)
     {
         this.name = name;
         this.price = price;
         this.stock = stock;
+        this.purchasePrice = purchasePrice;
     }
 
     public Long getId()
@@ -62,5 +64,15 @@ public class Product
     public void setStock(int stock)
     {
         this.stock = stock;
+    }
+
+    public int getPurchasePrice()
+    {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(int purchasePrice)
+    {
+        this.purchasePrice = purchasePrice;
     }
 }

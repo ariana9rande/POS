@@ -30,8 +30,10 @@ public class ProductController
     }
 
     @GetMapping("/register")
-    public String productManage()
+    public String productManage(Model model)
     {
+        List<Product> products = productService.getAllProducts();
+        model.addAttribute("products", products);
         return "productRegister";
     }
 
@@ -43,11 +45,27 @@ public class ProductController
             Model model
     )
     {
+        List<Product> products = productService.getAllProducts();
+
+        if (name != null)
+        {
+            for (Product product : products)
+            {
+                if (product.getName().equals(name))
+                {
+                    model.addAttribute("error", "이미 존재하는 상품입니다. 입고를 이용해주세요");
+                    model.addAttribute("products", products);
+                    return "productRegister";
+                }
+            }
+        }
+
         // Product 객체 생성
         Product product = new Product();
         product.setName(name);
         product.setPrice(price);
         product.setStock(stock);
+        product.setPurchasePrice((int)(price * 0.3));
 
         // ProductService를 통해 상품 등록
         productService.registerProduct(product);
@@ -82,8 +100,14 @@ public class ProductController
     {
         productService.addProductStock(productId, quantity);
         Product product = productService.findProductById(productId);
+
+        Balance balance = balanceService.findFirstBalance();
+        balance.setAmount(balance.getAmount() - product.getPurchasePrice() * quantity);
+        balanceService.updateBalance(balance);
+
         model.addAttribute("product", product);
         model.addAttribute("quantity", quantity);
+
         return "productAddSuccess";
     }
 

@@ -26,12 +26,34 @@
         <div class="form-group">
             <label for="stock">Quantity</label>
             <input type="number" id="stock" name="stock" class="form-control" required>
+            <p>${error}</p>
         </div>
         <div class="btn-group">
             <button type="submit" class="btn btn-primary">Register</button>
             <a href="/" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
+</div>
+<div class="container">
+    <h2>상품 목록</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>상품명</th>
+            <th>가격</th>
+            <th>수량</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="product" items="${products}">
+            <tr>
+                <td>${product.name}</td>
+                <td>${product.price}</td>
+                <td>${product.stock}</td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>

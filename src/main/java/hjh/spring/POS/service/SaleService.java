@@ -3,7 +3,6 @@ package hjh.spring.POS.service;
 import hjh.spring.POS.domain.Sale;
 import hjh.spring.POS.domain.SaleItem;
 import hjh.spring.POS.repository.SaleRepository;
-import org.springframework.stereotype.Service;
 
 public class SaleService
 {

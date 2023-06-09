@@ -17,7 +17,7 @@
         <c:forEach var="saleItem" items="${sale.saleItems}">
             <p>${saleItem.product.name} ${saleItem.quantity}개</p>
         </c:forEach>
-
+        <br>
         <h4>남은 개수</h4>
         <c:forEach var="saleItem" items="${sale.saleItems}">
             <p>${saleItem.product.name} ${saleItem.product.stock}개</p>

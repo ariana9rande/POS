@@ -1,14 +1,28 @@
 package hjh.spring.POS.controller;
 
+import hjh.spring.POS.domain.Balance;
+import hjh.spring.POS.service.BalanceService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class WebController
 {
-    @GetMapping("/")
-    public String index()
+    private final BalanceService balanceService;
+
+    public WebController(BalanceService balanceService)
     {
+        this.balanceService = balanceService;
+    }
+
+    @GetMapping("/")
+    public String index(HttpSession session)
+    {
+        Balance balance = balanceService.findFirstBalance();
+
+        session.setAttribute("balance", balance);
         return "index";
     }
 }

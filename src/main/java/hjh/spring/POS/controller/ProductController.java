@@ -1,8 +1,10 @@
 package hjh.spring.POS.controller;
 
+import hjh.spring.POS.domain.Balance;
 import hjh.spring.POS.domain.Product;
 import hjh.spring.POS.domain.Sale;
 import hjh.spring.POS.domain.SaleItem;
+import hjh.spring.POS.service.BalanceService;
 import hjh.spring.POS.service.ProductService;
 import hjh.spring.POS.service.SaleService;
 import jakarta.servlet.http.HttpSession;
@@ -18,11 +20,13 @@ public class ProductController
 {
     private final ProductService productService;
     private final SaleService saleService;
+    private final BalanceService balanceService;
 
-    public ProductController(ProductService productService, SaleService saleService)
+    public ProductController(ProductService productService, SaleService saleService, BalanceService balanceService)
     {
         this.productService = productService;
         this.saleService = saleService;
+        this.balanceService = balanceService;
     }
 
     @GetMapping("/register")
@@ -218,8 +222,14 @@ public class ProductController
                 saleService.deleteSaleItem(saleItem);
             }
 
+            Balance balance = balanceService.findFirstBalance();
+            balance.setAmount(balance.getAmount() + sale.getTotalPrice());
+            balanceService.updateBalance(balance);
+
             // Sale 객체 삭제
             saleService.deleteSale(sale.getId());
+
+            session.setAttribute("balance", balance);
         }
 
         return "sellConfirmSuccess";

@@ -1,6 +1,7 @@
 package hjh.spring.POS.configuration;
 
 import hjh.spring.POS.repository.*;
+import hjh.spring.POS.service.BalanceService;
 import hjh.spring.POS.service.MemberService;
 import hjh.spring.POS.service.ProductService;
 import hjh.spring.POS.service.SaleService;
@@ -61,6 +62,18 @@ public class JavaConfig
     public SaleService saleService(SaleRepository saleRepository)
     {
         return new SaleService(saleRepository);
+    }
+
+    @Bean
+    public BalanceRepository balanceRepository()
+    {
+        return new BalanceRepositoryImpl();
+    }
+
+    @Bean
+    public BalanceService balanceService(BalanceRepository balanceRepository)
+    {
+        return new BalanceService(balanceRepository);
     }
 
     // 다른 의존성을 등록하는 코드 작성

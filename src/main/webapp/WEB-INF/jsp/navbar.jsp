@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="hjh.spring.POS.domain.Balance" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/">POS System</a>
@@ -20,4 +22,9 @@
             </li>
         </ul>
     </div>
+    <%
+        Balance balance = (Balance) session.getAttribute("balance");
+
+        out.println("<a class='navbar-brand' style='color:white;'> ₩" + balance.getAmount() + "</a>");
+    %>
 </nav>

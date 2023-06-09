@@ -21,13 +21,22 @@ public class ProductRepositoryImpl implements ProductRepository
         try
         {
             conn = JdbcConfig.getConnection();
-            String sql = "INSERT INTO product (name, price, stock) VALUES (?, ?, ?)";
-            pstmt = conn.prepareStatement(sql);
+            String sql = "INSERT INTO product (name, price, stock, purchase_price) VALUES (?, ?, ?, ?)";
+            pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, product.getName());
             pstmt.setInt(2, product.getPrice());
             pstmt.setInt(3, product.getStock());
+            pstmt.setInt(4, product.getPurchasePrice());
 
             pstmt.executeUpdate();
+
+            // 생성된 Product의 ID 가져오기
+            ResultSet generatedKeys = pstmt.getGeneratedKeys();
+            if (generatedKeys.next())
+            {
+                Long productId = generatedKeys.getLong(1);
+                product.setId(productId);
+            }
         }
         catch (SQLException e)
         {

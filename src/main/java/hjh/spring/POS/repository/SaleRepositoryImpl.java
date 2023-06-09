@@ -65,11 +65,19 @@ public class SaleRepositoryImpl implements SaleRepository
         {
             conn = JdbcConfig.getConnection();
             String sql = "INSERT INTO sale_item (sale_id, product_id, quantity) VALUES (?, ?, ?)";
-            pstmt = conn.prepareStatement(sql);
+            pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setLong(1, saleId);
             pstmt.setLong(2, saleItem.getProduct().getId());
             pstmt.setInt(3, saleItem.getQuantity());
             pstmt.executeUpdate();
+
+            // 생성된 SaleItem의 ID 가져오기
+            ResultSet generatedKeys = pstmt.getGeneratedKeys();
+            if (generatedKeys.next())
+            {
+                long saleItemId = generatedKeys.getLong(1);
+                saleItem.setId(saleItemId);
+            }
         }
         catch (SQLException e)
         {

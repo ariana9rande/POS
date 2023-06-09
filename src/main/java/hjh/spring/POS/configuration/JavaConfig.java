@@ -1,10 +1,7 @@
 package hjh.spring.POS.configuration;
 
 import hjh.spring.POS.repository.*;
-import hjh.spring.POS.service.BalanceService;
-import hjh.spring.POS.service.MemberService;
-import hjh.spring.POS.service.ProductService;
-import hjh.spring.POS.service.SaleService;
+import hjh.spring.POS.service.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -74,5 +71,17 @@ public class JavaConfig
     public BalanceService balanceService(BalanceRepository balanceRepository)
     {
         return new BalanceService(balanceRepository);
+    }
+
+    @Bean
+    public LogRepository logRepository()
+    {
+        return new LogRepositoryImpl();
+    }
+
+    @Bean
+    public LogService logService(LogRepository logRepository)
+    {
+        return new LogService(logRepository);
     }
 }

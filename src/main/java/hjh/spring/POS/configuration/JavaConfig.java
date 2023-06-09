@@ -75,7 +75,4 @@ public class JavaConfig
     {
         return new BalanceService(balanceRepository);
     }
-
-    // 다른 의존성을 등록하는 코드 작성
-    // ...
 }

@@ -39,6 +39,7 @@
             <th>상품명</th>
             <th>가격</th>
             <th>수량</th>
+            <th>구매가격</th>
         </tr>
         </thead>
         <tbody>
@@ -47,6 +48,7 @@
                 <td>${product.name}</td>
                 <td>${product.price}</td>
                 <td>${product.stock}</td>
+                <td>${product.purchasePrice}</td>
             </tr>
         </c:forEach>
         </tbody>

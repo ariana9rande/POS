@@ -64,6 +64,7 @@ public class ProductRepositoryImpl implements ProductRepository
                 product.setName(rs.getString("name"));
                 product.setPrice(rs.getInt("price"));
                 product.setStock(rs.getInt("stock"));
+                product.setPurchasePrice(rs.getInt("purchase_price"));
             }
         }
         catch (SQLException e)
@@ -103,6 +104,7 @@ public class ProductRepositoryImpl implements ProductRepository
                 product.setName(rs.getString("name"));
                 product.setPrice(rs.getInt("price"));
                 product.setStock(rs.getInt("stock"));
+                product.setPurchasePrice(rs.getInt("purchase_price"));
 
                 productList.add(product);
             }

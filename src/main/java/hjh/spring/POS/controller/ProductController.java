@@ -96,7 +96,7 @@ public class ProductController
     @PostMapping("/add")
     public String productAdd(@RequestParam("productId") Long productId,
                              @RequestParam("quantity") int quantity,
-                             Model model)
+                             Model model, HttpSession session)
     {
         productService.addProductStock(productId, quantity);
         Product product = productService.findProductById(productId);
@@ -107,6 +107,8 @@ public class ProductController
 
         model.addAttribute("product", product);
         model.addAttribute("quantity", quantity);
+
+        session.setAttribute("balance", balance);
 
         return "productAddSuccess";
     }

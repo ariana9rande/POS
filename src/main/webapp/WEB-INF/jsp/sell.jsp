@@ -14,7 +14,6 @@
 </div>
 <%@ include file="navbar.jsp" %>
 <div class="container">
-    <h2>Add To Sell List</h2>
     <form action="/product/addToSellList" method="post">
         <div class="form-group">
             <label for="product">Product</label>
@@ -28,10 +27,12 @@
         <div class="form-group">
             <label for="quantity">Quantity</label>
             <input type="number" id="quantity" name="quantity" class="form-control" required>
+            <p style="color:red;">${error}</p>
         </div>
         <button type="submit" class="btn btn-primary">Add To Sell List</button>
+        <a href="/product/sellConfirm" class="btn btn-primary">판매</a>
     </form>
-    <a href="/product/sellConfirm" class="btn btn-primary">판매</a>
+    <br>
     <table class="table">
         <thead>
         <tr>

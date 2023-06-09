@@ -170,4 +170,41 @@ public class SaleRepositoryImpl implements SaleRepository
 
         return saleItem;
     }
+
+    @Override
+    public Sale findFirst()
+    {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Sale sale = null;
+
+        try
+        {
+            conn = JdbcConfig.getConnection();
+            String sql = "SELECT * FROM sale ORDER BY id LIMIT 1";
+            pstmt = conn.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            if (rs.next())
+            {
+                // Sale 객체 생성 및 값 설정
+                sale = new Sale();
+                sale.setId(rs.getLong("id"));
+                // Sale 객체의 다른 속성들도 필요에 따라 설정
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JdbcConfig.close(rs);
+            JdbcConfig.close(pstmt);
+            JdbcConfig.close(conn);
+        }
+
+        return sale;
+    }
 }

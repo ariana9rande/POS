@@ -33,4 +33,9 @@ public class SaleService
     {
         saleRepository.updateSaleItem(saleItem);
     }
+
+    public Sale findSale()
+    {
+        return saleRepository.findFirst();
+    }
 }

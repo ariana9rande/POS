@@ -20,5 +20,5 @@ public interface SaleRepository
 
     SaleItem findSaleItemById(Long saleItemId);
 
-
+    Sale findFirst();
 }

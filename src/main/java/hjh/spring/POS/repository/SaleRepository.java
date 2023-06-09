@@ -21,4 +21,8 @@ public interface SaleRepository
     SaleItem findSaleItemById(Long saleItemId);
 
     Sale findFirst();
+
+    void deleteSaleItem(SaleItem saleItem);
+
+    void deleteSaleById(Long saleId);
 }

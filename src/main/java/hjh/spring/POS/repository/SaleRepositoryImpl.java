@@ -207,4 +207,53 @@ public class SaleRepositoryImpl implements SaleRepository
 
         return sale;
     }
+
+    public void deleteSaleItem(SaleItem saleItem)
+    {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try
+        {
+            conn = JdbcConfig.getConnection();
+            String sql = "DELETE FROM sale_item WHERE product_id = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setLong(1, saleItem.getProduct().getId());
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JdbcConfig.close(pstmt);
+            JdbcConfig.close(conn);
+        }
+    }
+
+    public void deleteSaleById(Long saleId)
+    {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try
+        {
+            conn = JdbcConfig.getConnection();
+            String sql = "DELETE FROM sale WHERE id = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setLong(1, saleId);
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JdbcConfig.close(pstmt);
+            JdbcConfig.close(conn);
+        }
+    }
+
 }

@@ -13,4 +13,6 @@ public interface ProductRepository
     List<Product> findAllProducts();
 
     void addStock(Long id, int quantity);
+
+    void update(Product product);
 }

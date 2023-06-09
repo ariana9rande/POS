@@ -147,4 +147,29 @@ public class ProductRepositoryImpl implements ProductRepository
             JdbcConfig.close(conn);
         }
     }
+
+    public void update(Product product)
+    {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try
+        {
+            conn = JdbcConfig.getConnection();
+            String sql = "UPDATE product SET stock = ? WHERE id = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, product.getStock());
+            pstmt.setLong(2, product.getId());
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JdbcConfig.close(pstmt);
+            JdbcConfig.close(conn);
+        }
+    }
 }

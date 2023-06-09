@@ -28,9 +28,7 @@
             <tr>
                 <td>${saleItem.product.name}</td>
                 <td>${saleItem.quantity}</td>
-                <td>
-<%--                    <a href="/product/removeFromSellList?saleItemId=${saleItem.id}" class="btn btn-danger">Remove</a>--%>
-                </td>
+                <td>${saleItem.quantity * saleItem.product.price}</td>
             </tr>
         </c:forEach>
         </tbody>
@@ -40,7 +38,7 @@
         <h4>Total Price: ${sale.totalPrice}</h4>
     </div>
 
-    <form action="/product/sell" method="post">
+    <form action="/product/sellConfirm" method="post">
         <button type="submit" class="btn btn-primary">Sell</button>
     </form>
 </div>

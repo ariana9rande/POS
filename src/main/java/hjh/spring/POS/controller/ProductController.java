@@ -8,10 +8,7 @@ import hjh.spring.POS.service.SaleService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -91,7 +88,7 @@ public class ProductController
     {
         // Sale 객체 생성
         Sale sale = (Sale) session.getAttribute("sale");
-        if(sale == null)
+        if (sale == null)
         {
             sale = new Sale();
             saleService.saveSale(sale);
@@ -107,7 +104,7 @@ public class ProductController
     }
 
 
-    @PostMapping("/addToSellList")
+    @PostMapping("/sell")
     public String addToSellList(@RequestParam("productId") Long productId,
                                 @RequestParam("quantity") int quantity,
                                 HttpSession session,
@@ -132,7 +129,7 @@ public class ProductController
         {
             if (saleItem.getProduct().getId().equals(productId))
             {
-                if(quantity + saleItem.getQuantity() > product.getStock())
+                if (quantity + saleItem.getQuantity() > product.getStock())
                 {
                     model.addAttribute("error", "입력한 수량이 상품의 재고를 초과합니다.");
                     List<Product> products = productService.getAllProducts();
@@ -149,7 +146,8 @@ public class ProductController
             }
         }
 
-        if (quantity > product.getStock()) {
+        if (quantity > product.getStock())
+        {
             // 재고(stock)를 초과하는 수량이 입력된 경우, 에러 메시지를 모델에 추가하고 다시 sell 페이지로 이동
             model.addAttribute("error", "입력한 수량이 상품의 재고를 초과합니다.");
             // 모델에 상품 목록 추가
@@ -174,7 +172,6 @@ public class ProductController
         }
 
 
-
         sale.calculateTotalPrice();
         saleService.updateSale(sale);
 
@@ -190,7 +187,7 @@ public class ProductController
 
 
     @GetMapping("/sellConfirm")
-    public String sellConfirm(HttpSession session, Model model)
+    public String sellConfirmPage(HttpSession session, Model model)
     {
         Sale sale = (Sale) session.getAttribute("sale");
 
@@ -198,4 +195,34 @@ public class ProductController
 
         return "sellConfirm";
     }
+
+    @PostMapping("/sellConfirm")
+    public String sellConfirm(HttpSession session, Model model)
+    {
+        // 세션에서 Sale 객체 가져오기
+        Sale sale = (Sale) session.getAttribute("sale");
+
+        // Sale 객체가 null이 아니라면 SaleItem을 판매 처리하고 Product의 stock을 업데이트
+        if (sale != null)
+        {
+            for (SaleItem saleItem : sale.getSaleItems())
+            {
+                Product product = saleItem.getProduct();
+                int quantity = saleItem.getQuantity();
+
+                // Product의 stock 업데이트
+                product.setStock(product.getStock() - quantity);
+                productService.updateProduct(product);
+
+                // SaleItem 삭제
+                saleService.deleteSaleItem(saleItem);
+            }
+
+            // Sale 객체 삭제
+            saleService.deleteSale(sale.getId());
+        }
+
+        return "sellConfirmSuccess";
+    }
+
 }

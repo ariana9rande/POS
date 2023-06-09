@@ -38,4 +38,14 @@ public class SaleService
     {
         return saleRepository.findFirst();
     }
+
+    public void deleteSaleItem(SaleItem saleItem)
+    {
+        saleRepository.deleteSaleItem(saleItem);
+    }
+
+    public void deleteSale(Long saleId)
+    {
+        saleRepository.deleteSaleById(saleId);
+    }
 }

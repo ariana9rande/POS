@@ -34,4 +34,9 @@ public class ProductService
     {
         productRepository.addStock(id, quantity);
     }
+
+    public void updateProduct(Product product)
+    {
+        productRepository.update(product);
+    }
 }

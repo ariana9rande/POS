@@ -14,7 +14,7 @@
 </div>
 <%@ include file="navbar.jsp" %>
 <div class="container">
-    <form action="/product/addToSellList" method="post">
+    <form action="/product/sell" method="post">
         <div class="form-group">
             <label for="product">Product</label>
             <select id="product" name="productId" class="form-control" required>

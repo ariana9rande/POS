@@ -19,7 +19,7 @@
                 <a class="nav-link" href="/product/sell">판매</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">통계</a>
+                <a class="nav-link" href="/statistics/">통계</a>
             </li>
         </ul>
     </div>

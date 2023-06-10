@@ -2,13 +2,23 @@ package hjh.spring.POS.repository;
 
 import hjh.spring.POS.configuration.JdbcConfig;
 import hjh.spring.POS.domain.Log;
+import hjh.spring.POS.service.ProductService;
+import org.springframework.boot.autoconfigure.batch.BatchProperties;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LogRepositoryImpl implements LogRepository
 {
+    private final ProductService productService;
+
+    public LogRepositoryImpl(ProductService productService)
+    {
+        this.productService = productService;
+    }
+
     public void saveLog(Log log)
     {
         Connection conn = null;
@@ -34,5 +44,55 @@ public class LogRepositoryImpl implements LogRepository
             JdbcConfig.close(pstmt);
             JdbcConfig.close(conn);
         }
+    }
+
+    @Override
+    public List<Log> getLogs(String action, String range)
+    {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        List<Log> statistics = new ArrayList<>();
+
+        try
+        {
+            conn = JdbcConfig.getConnection();
+            String sql = "";
+
+            sql = switch (range)
+                    {
+                        case "daily" ->
+                                "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE action = " + action + "AND DATE(log_time) = CURRENT_DATE()";
+                        case "weekly" ->
+                                "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE action = " + action + " AND log_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 WEEK)";
+                        case "monthly" ->
+                                "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE action = " + action + " AND YEAR(log_time) = YEAR(CURRENT_DATE()) AND MONTH(log_time) = MONTH(CURRENT_DATE())";
+                        default -> sql;
+                    };
+
+            pstmt = conn.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            while (rs.next())
+            {
+                Timestamp timestamp = rs.getTimestamp("timestamp");
+                int sumChangeStock = rs.getInt("sum_change_stock");
+                int sumChangeBalance = rs.getInt("sum_change_balance");
+                Long productId = rs.getLong("product_id");
+                statistics.add(new Log(productService.findProductById(productId), sumChangeStock, sumChangeBalance,
+                        timestamp));
+            }
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JdbcConfig.close(rs);
+            JdbcConfig.close(pstmt);
+            JdbcConfig.close(conn);
+        }
+        return statistics;
     }
 }

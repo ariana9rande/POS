@@ -15,6 +15,19 @@ public class Log
     private int changeBalance;
     private Timestamp timestamp;
 
+    public Log()
+    {
+
+    }
+
+    public Log(Product product, int changeStock, int changeBalance, Timestamp timestamp)
+    {
+        this.product = product;
+        this.changeStock = changeStock;
+        this.changeBalance = changeBalance;
+        this.timestamp = timestamp;
+    }
+
     public Long getId()
     {
         return id;

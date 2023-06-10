@@ -141,19 +141,19 @@ public class ProductController
     @GetMapping("/sell")
     public String productSellForm(Model model, HttpSession session)
     {
-        // Sale 객체 생성
-        Sale sale = (Sale) session.getAttribute("sale");
-        if (sale == null)
-        {
-            sale = new Sale();
-            saleService.saveSale(sale);
-        }
+//        // Sale 객체 생성
+//        Sale sale = (Sale) session.getAttribute("sale");
+//        if (sale == null)
+//        {
+//            sale = new Sale();
+//            saleService.saveSale(sale);
+//        }
 
         List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
 
         // Sale 객체를 세션에 저장
-        session.setAttribute("sale", sale);
+//        session.setAttribute("sale", sale);
 
         return "sell";
     }
@@ -173,6 +173,7 @@ public class ProductController
         if (sale == null)
         {
             sale = new Sale();
+            saleService.saveSale(sale);
             session.setAttribute("sale", sale);
         }
 

@@ -62,11 +62,11 @@ public class LogRepositoryImpl implements LogRepository
             sql = switch (range)
                     {
                         case "daily" ->
-                                "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE action = " + action + "AND DATE(log_time) = CURRENT_DATE()";
+                                "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE action = '" + action + "' AND DATE(log_time) = DATE(NOW())";
                         case "weekly" ->
-                                "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE action = " + action + " AND log_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 WEEK)";
+                                "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE action = '" + action + "' AND log_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 WEEK)";
                         case "monthly" ->
-                                "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE action = " + action + " AND YEAR(log_time) = YEAR(CURRENT_DATE()) AND MONTH(log_time) = MONTH(CURRENT_DATE())";
+                                "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE action = '" + action + "' AND YEAR(log_time) = YEAR(CURRENT_DATE()) AND MONTH(log_time) = MONTH(CURRENT_DATE())";
                         default -> sql;
                     };
 
@@ -75,12 +75,12 @@ public class LogRepositoryImpl implements LogRepository
 
             while (rs.next())
             {
-                Timestamp timestamp = rs.getTimestamp("timestamp");
-                int sumChangeStock = rs.getInt("sum_change_stock");
-                int sumChangeBalance = rs.getInt("sum_change_balance");
+                Timestamp logTime = rs.getTimestamp("log_time");
+                int sumChangeStock = rs.getInt("change_stock");
+                int sumChangeBalance = rs.getInt("change_balance");
                 Long productId = rs.getLong("product_id");
                 statistics.add(new Log(productService.findProductById(productId), sumChangeStock, sumChangeBalance,
-                        timestamp));
+                        logTime));
             }
         }
         catch (SQLException e)

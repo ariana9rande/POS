@@ -5,7 +5,6 @@ import hjh.spring.POS.service.LogService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -23,16 +22,20 @@ public class LogController
     }
 
     @GetMapping("/")
-    public String StatisticsPage()
+    public String StatisticsForm()
     {
-        return "statistics/statistics";
+        return "/statistics/statisticsForm";
     }
 
-    @GetMapping("/daily")
-    public String dailyStatisticsPage(
-                                      Model model)
+    @GetMapping("/statistics")
+    public String Statistics(@RequestParam("action") String action,
+                             @RequestParam("range") String range,
+                             Model model)
     {
+        List<Log> logs = logService.getLogs(action, range);
+        model.addAttribute("logs", logs);
+        model.addAttribute("action", action);
 
-        return "statistics/daily";
+        return "/statistics/statistics";
     }
 }

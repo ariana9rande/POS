@@ -59,17 +59,37 @@ public class LogRepositoryImpl implements LogRepository
             conn = JdbcConfig.getConnection();
             String sql = "";
 
-            sql = switch (range)
-                    {
-                        case "daily" ->
-                                "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE action = '" + action + "' AND DATE(log_time) = DATE(NOW())";
-                        case "weekly" ->
-                                "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE action = '" + action + "' AND log_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 WEEK)";
-                        case "monthly" ->
-                                "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE action = '" + action + "' AND YEAR(log_time) = YEAR(CURRENT_DATE()) AND MONTH(log_time) = MONTH(CURRENT_DATE())";
-                        default -> sql;
-                    };
 
+            if (action.equals("all"))
+            {
+                sql = switch (range)
+                        {
+                            case "daily" ->
+                                    "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE DATE(log_time) = DATE(NOW())";
+                            case "weekly" ->
+                                    "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE log_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 WEEK)";
+                            case "monthly" ->
+                                    "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE YEAR(log_time) = YEAR(CURRENT_DATE()) AND MONTH(log_time) = MONTH(CURRENT_DATE())";
+                            case "all" ->
+                                    "SELECT log_time, change_stock, change_balance, product_id FROM log";
+                            default -> sql;
+                        };
+            }
+            else
+            {
+                sql = switch (range)
+                        {
+                            case "daily" ->
+                                    "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE action = '" + action + "' AND DATE(log_time) = DATE(NOW())";
+                            case "weekly" ->
+                                    "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE action = '" + action + "' AND log_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 WEEK)";
+                            case "monthly" ->
+                                    "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE action = '" + action + "' AND YEAR(log_time) = YEAR(CURRENT_DATE()) AND MONTH(log_time) = MONTH(CURRENT_DATE())";
+                            case "all" ->
+                                    "SELECT log_time, change_stock, change_balance, product_id FROM log WHERE action = '" + action + "'";
+                            default -> sql;
+                        };
+            }
             pstmt = conn.prepareStatement(sql);
             rs = pstmt.executeQuery();
 

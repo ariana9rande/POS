@@ -20,6 +20,7 @@
                 <option value="register">Register</option>
                 <option value="add">Add</option>
                 <option value="sell">Sell</option>
+                <option value="all">All</option>
             </select>
         </div>
         <div class="form-group">
@@ -29,6 +30,7 @@
                 <option value="daily">Daily</option>
                 <option value="weekly">Weekly</option>
                 <option value="monthly">Monthly</option>
+                <option value="all">All</option>
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>

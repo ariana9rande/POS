@@ -10,7 +10,7 @@
                 <a class="nav-link" href="/product/register">상품 등록</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/product/add">입고</a>
+                <a class="nav-link" href="/product/add">상품 입고</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/product/products">상품 목록</a>

@@ -35,6 +35,7 @@ public class LogController
         List<Log> logs = logService.getLogs(action, range);
         model.addAttribute("logs", logs);
         model.addAttribute("action", action);
+        model.addAttribute("range", range);
 
         return "/statistics/statistics";
     }

@@ -28,6 +28,15 @@ public class Log
         this.timestamp = timestamp;
     }
 
+    public Log(String action, Product product, int changeStock, int changeBalance, Timestamp timestamp)
+    {
+        this.action = action;
+        this.product = product;
+        this.changeStock = changeStock;
+        this.changeBalance = changeBalance;
+        this.timestamp = timestamp;
+    }
+
     public Long getId()
     {
         return id;

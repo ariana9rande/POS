@@ -3,7 +3,7 @@ package hjh.spring.POS.service;
 import hjh.spring.POS.domain.Log;
 import hjh.spring.POS.repository.LogRepository;
 
-import java.util.List;
+import java.util.*;
 
 public class LogService
 {
@@ -22,5 +22,15 @@ public class LogService
     public List<Log> getLogs(String action, String range)
     {
         return logRepository.getLogs(action, range);
+    }
+
+    public Map<String, List<Log>> groupLogsByAction(List<Log> logs)
+    {
+        return logRepository.groupLogsByAction(logs);
+    }
+
+    public Map<String, Map<String, Integer>> calculateStatistics(Map<String, List<Log>> groupedLogs)
+    {
+        return logRepository.calculateStatistics(groupedLogs);
     }
 }

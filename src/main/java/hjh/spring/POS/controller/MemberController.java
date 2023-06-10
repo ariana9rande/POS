@@ -1,11 +1,8 @@
 package hjh.spring.POS.controller;
 
-import hjh.spring.POS.configuration.JavaConfig;
 import hjh.spring.POS.domain.Member;
 import hjh.spring.POS.service.MemberService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +25,7 @@ public class MemberController
     public String signupForm(Model model)
     {
         model.addAttribute("member", new Member());
-        return "join";
+        return "member/join";
     }
 
     @PostMapping("/join")
@@ -39,13 +36,13 @@ public class MemberController
         {
             String message = "중복된 이메일입니다.";
             model.addAttribute("duplicateEmail", message);
-            return "join";
+            return "member/join";
         }
         else
         {
             memberService.register(member);
             model.addAttribute("member", member);
-            return "joinSuccess";
+            return "member/joinSuccess";
         }
     }
 
@@ -53,7 +50,7 @@ public class MemberController
     public String loginForm(Model model)
     {
         model.addAttribute("member", new Member());
-        return "login";
+        return "member/login";
     }
 
     @PostMapping("/login")
@@ -63,7 +60,7 @@ public class MemberController
         if (member == null)
         {
             model.addAttribute("loginFailed", "아이디 또는 비밀번호가 올바르지 않습니다.");
-            return "login";
+            return "member/login";
         }
 
         session.setAttribute("loginMember", member);

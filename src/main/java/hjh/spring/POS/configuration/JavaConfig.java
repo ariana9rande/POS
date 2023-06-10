@@ -74,9 +74,9 @@ public class JavaConfig
     }
 
     @Bean
-    public LogRepository logRepository()
+    public LogRepository logRepository(ProductService productService)
     {
-        return new LogRepositoryImpl();
+        return new LogRepositoryImpl(productService);
     }
 
     @Bean

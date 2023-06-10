@@ -4,14 +4,17 @@
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-    <title>Statistics</title>
+    <title>회원 가입 성공</title>
 </head>
 <body>
 <div class="header">
-    <h1>Statistics</h1>
+    <h1>회원 가입 성공</h1>
 </div>
-<%@ include file="navbar.jsp" %>
+<%@ include file="../navbar.jsp" %>
 <div class="container">
+    <div>
+        <h3>${member.name}님, 환영합니다.</h3>
+    </div>
 </div>
 </body>
 </html>

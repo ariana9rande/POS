@@ -9,7 +9,7 @@
 <div class="header">
     <h1>Sign Up</h1>
 </div>
-<%@ include file="navbar.jsp" %>
+<%@ include file="../navbar.jsp" %>
 <div class="container">
     <h1 class="mt-5">회원 가입</h1>
     <form action="/member/join" method="post">

@@ -1,3 +1,7 @@
+<%@ page import="hjh.spring.POS.domain.Product" %>
+<%@ page import="java.util.List" %>
+<%@ page import="hjh.spring.POS.service.ProductService" %>
+<%@ page import="hjh.spring.POS.repository.ProductRepository" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -35,10 +39,12 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-    <h2>${range} ${action} 통계</h2>
+    <h2>${range == 'daily' ? '일일' : range == 'weekly' ? '주간' : range == 'monthly' ? '월간' : '전체'} ${action == 'register' ? '등록' : action == 'add' ? '입고' : action == 'sell' ? '판매' : '전체'}
+        통계</h2>
     <c:choose>
         <c:when test="${action == 'all'}">
-            <h3>${range} 등록 통계</h3>
+            <br><br>
+            <h3>${range == 'daily' ? '일일' : range == 'weekly' ? '주간' : range == 'monthly' ? '월간' : '전체'} 등록 통계</h3>
             <table class="table" id="t1">
                 <thead>
                 <tr>
@@ -50,10 +56,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:set var="hasRegisterLogs" value="false" />
+                <c:set var="hasRegisterLogs" value="false"/>
                 <c:forEach var="log" items="${logs}">
                     <c:if test="${log.action == 'register'}">
-                        <c:set var="hasRegisterLogs" value="true" />
+                        <c:set var="hasRegisterLogs" value="true"/>
                     </c:if>
                 </c:forEach>
                 <c:choose>
@@ -80,7 +86,7 @@
                 </c:choose>
                 </tbody>
             </table>
-            <h3>${range} 입고 통계</h3>
+            <h3>${range == 'daily' ? '일일' : range == 'weekly' ? '주간' : range == 'monthly' ? '월간' : '전체'} 입고 통계</h3>
             <table class="table" id="t2">
                 <thead>
                 <tr>
@@ -92,10 +98,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:set var="hasAddLogs" value="false" />
+                <c:set var="hasAddLogs" value="false"/>
                 <c:forEach var="log" items="${logs}">
                     <c:if test="${log.action == 'add'}">
-                        <c:set var="hasAddLogs" value="true" />
+                        <c:set var="hasAddLogs" value="true"/>
                     </c:if>
                 </c:forEach>
                 <c:choose>
@@ -120,7 +126,7 @@
                 </c:choose>
                 </tbody>
             </table>
-            <h3>${range} 판매 통계</h3>
+            <h3>${range == 'daily' ? '일일' : range == 'weekly' ? '주간' : range == 'monthly' ? '월간' : '전체'} 판매 통계</h3>
             <table class="table" id="t2">
                 <thead>
                 <tr>
@@ -132,10 +138,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:set var="hasSellLogs" value="false" />
+                <c:set var="hasSellLogs" value="false"/>
                 <c:forEach var="log" items="${logs}">
                     <c:if test="${log.action == 'sell'}">
-                        <c:set var="hasSellLogs" value="true" />
+                        <c:set var="hasSellLogs" value="true"/>
                     </c:if>
                 </c:forEach>
                 <c:choose>
@@ -265,521 +271,234 @@
             </c:choose>
         </c:otherwise>
     </c:choose>
+    <br><br><br>
 
 
-
-
-
-
-
-
-<%--    <c:choose>--%>
-<%--        <c:when test="${action == 'register' or action == 'add' or action == 'all'}">--%>
-<%--            <table class="table" id="t1">--%>
-<%--                <thead>--%>
-<%--                <tr>--%>
-<%--                    <th>제품명</th>--%>
-<%--                    <th>구매 가격</th>--%>
-<%--                    <th>수량</th>--%>
-<%--                    <th>지출</th>--%>
-<%--                    <th>날짜</th>--%>
-<%--                </tr>--%>
-<%--                </thead>--%>
-<%--                <tbody>--%>
-<%--                <c:choose>--%>
-<%--                    <c:when test="${empty groupedLogs.register and empty groupedLogs.add and empty groupedLogs.sell}">--%>
-<%--                        <tr>--%>
-<%--                            <td colspan="5"><p>데이터가 존재하지 않습니다.</p></td>--%>
-<%--                        </tr>--%>
-<%--                    </c:when>--%>
-<%--                    <c:otherwise>--%>
-<%--                        <c:forEach var="log" items="${groupedLogs.register}">--%>
-<%--                            <tr>--%>
-<%--                                <td>${log.product.name}</td>--%>
-<%--                                <td>${log.product.purchasePrice}</td>--%>
-<%--                                <td>${log.changeStock}</td>--%>
-<%--                                <td>${-log.changeBalance}</td>--%>
-<%--                                <td>${log.timestamp}</td>--%>
-<%--                            </tr>--%>
-<%--                        </c:forEach>--%>
-<%--                        <c:forEach var="log" items="${groupedLogs.add}">--%>
-<%--                            <tr>--%>
-<%--                                <td>${log.product.name}</td>--%>
-<%--                                <td>${log.product.purchasePrice}</td>--%>
-<%--                                <td>${log.changeStock}</td>--%>
-<%--                                <td>${-log.changeBalance}</td>--%>
-<%--                                <td>${log.timestamp}</td>--%>
-<%--                            </tr>--%>
-<%--                        </c:forEach>--%>
-<%--                        <c:forEach var="log" items="${groupedLogs.sell}">--%>
-<%--                            <tr>--%>
-<%--                                <td>${log.product.name}</td>--%>
-<%--                                <td>${log.product.price}</td>--%>
-<%--                                <td>${-log.changeStock}</td>--%>
-<%--                                <td>${log.changeBalance}</td>--%>
-<%--                                <td>${log.timestamp}</td>--%>
-<%--                            </tr>--%>
-<%--                        </c:forEach>--%>
-<%--                    </c:otherwise>--%>
-<%--                </c:choose>--%>
-<%--                </tbody>--%>
-<%--            </table>--%>
-<%--        </c:when>--%>
-<%--        <c:when test="${action == 'sell'}">--%>
-<%--            <table class="table" id="t2">--%>
-<%--                <!-- 테이블 헤더와 내용 -->--%>
-<%--                <thead>--%>
-<%--                <tr>--%>
-<%--                    <th>제품명</th>--%>
-<%--                    <th>판매 가격</th>--%>
-<%--                    <th>수량</th>--%>
-<%--                    <th>수입</th>--%>
-<%--                    <th>날짜</th>--%>
-<%--                </tr>--%>
-<%--                </thead>--%>
-<%--                <tbody>--%>
-<%--                <c:choose>--%>
-<%--                    <c:when test="${empty groupedLogs.sell}">--%>
-<%--                        <tr>--%>
-<%--                            <td colspan="5"><p>데이터가 존재하지 않습니다.</p></td>--%>
-<%--                        </tr>--%>
-<%--                    </c:when>--%>
-<%--                    <c:otherwise>--%>
-<%--                        <c:forEach var="log" items="${groupedLogs.sell}">--%>
-<%--                            <tr>--%>
-<%--                                <td>${log.product.name}</td>--%>
-<%--                                <td>${log.product.price}</td>--%>
-<%--                                <td>${log.changeStock}</td>--%>
-<%--                                <td>${log.changeBalance}</td>--%>
-<%--                                <td>${log.timestamp}</td>--%>
-<%--                            </tr>--%>
-<%--                        </c:forEach>--%>
-<%--                    </c:otherwise>--%>
-<%--                </c:choose>--%>
-<%--                </tbody>--%>
-<%--            </table>--%>
-<%--        </c:when>--%>
-<%--    </c:choose>--%>
-
-
-
-
-
-
-
-
-
-<%--    <c:choose>--%>
-<%--        <c:when test="${action == 'all'}">--%>
-<%--            <h3>${range} 등록 통계</h3>--%>
-<%--            <table class="table">--%>
-<%--                <thead>--%>
-<%--                <tr>--%>
-<%--                    <th>제품명</th>--%>
-<%--                    <th>등록 수량</th>--%>
-<%--                </tr>--%>
-<%--                </thead>--%>
-<%--                <tbody>--%>
-<%--                <c:choose>--%>
-<%--                    <c:when test="${not empty statistics['register']}">--%>
-<%--                        <c:forEach var="product" items="${statistics['register']}">--%>
-<%--                            <tr>--%>
-<%--                                <td>${product.key}</td>--%>
-<%--                                <td>${product.value}</td>--%>
-<%--                            </tr>--%>
-<%--                        </c:forEach>--%>
-<%--                    </c:when>--%>
-<%--                    <c:otherwise>--%>
-<%--                        <tr>--%>
-<%--                            <td colspan="2">데이터가 존재하지 않습니다.</td>--%>
-<%--                        </tr>--%>
-<%--                    </c:otherwise>--%>
-<%--                </c:choose>--%>
-<%--                </tbody>--%>
-<%--            </table>--%>
-<%--            <h3>품목별 입고 수량</h3>--%>
-<%--            <table class="table">--%>
-<%--                <thead>--%>
-<%--                <tr>--%>
-<%--                    <th>제품명</th>--%>
-<%--                    <th>입고 수량</th>--%>
-<%--                </tr>--%>
-<%--                </thead>--%>
-<%--                <tbody>--%>
-<%--                <c:choose>--%>
-<%--                    <c:when test="${not empty statistics['add']}">--%>
-<%--                        <c:forEach var="product" items="${statistics['add']}">--%>
-<%--                            <tr>--%>
-<%--                                <td>${product.key}</td>--%>
-<%--                                <td>${product.value}</td>--%>
-<%--                            </tr>--%>
-<%--                        </c:forEach>--%>
-<%--                    </c:when>--%>
-<%--                    <c:otherwise>--%>
-<%--                        <tr>--%>
-<%--                            <td colspan="2">데이터가 존재하지 않습니다.</td>--%>
-<%--                        </tr>--%>
-<%--                    </c:otherwise>--%>
-<%--                </c:choose>--%>
-<%--                </tbody>--%>
-<%--            </table>--%>
-<%--            <h3>품목별 판매 수량</h3>--%>
-<%--            <table class="table">--%>
-<%--                <thead>--%>
-<%--                <tr>--%>
-<%--                    <th>제품명</th>--%>
-<%--                    <th>판매 수량</th>--%>
-<%--                </tr>--%>
-<%--                </thead>--%>
-<%--                <tbody>--%>
-<%--                <c:choose>--%>
-<%--                    <c:when test="${not empty statistics['sell']}">--%>
-<%--                        <c:forEach var="product" items="${statistics['sell']}">--%>
-<%--                            <tr>--%>
-<%--                                <td>${product.key}</td>--%>
-<%--                                <td>${product.value}</td>--%>
-<%--                            </tr>--%>
-<%--                        </c:forEach>--%>
-<%--                    </c:when>--%>
-<%--                    <c:otherwise>--%>
-<%--                        <tr>--%>
-<%--                            <td colspan="2">데이터가 존재하지 않습니다.</td>--%>
-<%--                        </tr>--%>
-<%--                    </c:otherwise>--%>
-<%--                </c:choose>--%>
-<%--                </tbody>--%>
-<%--            </table>--%>
-<%--        </c:when>--%>
-<%--        <c:otherwise>--%>
-<%--            <h3>품목별 ${action == 'register' ? '등록' : action == 'add' ? '입고' : '판매'} 수량</h3>--%>
-<%--            <table class="table">--%>
-<%--                <thead>--%>
-<%--                <tr>--%>
-<%--                    <th>제품명</th>--%>
-<%--                    <th>${action == 'sell' ? '판매 가격' : '구매 가격'}</th>--%>
-<%--                    <th>수량</th>--%>
-<%--                    <th>${action == 'register' || action == 'add' ? '지출' : '수입'}</th>--%>
-<%--                </tr>--%>
-<%--                </thead>--%>
-<%--                <tbody>--%>
-<%--                <c:choose>--%>
-<%--                    <c:when test="${not empty groupedLogs[action]}">--%>
-<%--                        <c:forEach var="log" items="${groupedLogs[action]}">--%>
-<%--                            <tr>--%>
-<%--                                <td>${log.product.name}</td>--%>
-<%--                                <td>${action == 'sell' ? log.product.price : log.product.purchasePrice}</td>--%>
-<%--                                <td>${log.changeStock}</td>--%>
-<%--                                <td>${action == 'register' || action == 'add' ? -log.changeBalance : log.changeBalance}</td>--%>
-<%--                            </tr>--%>
-<%--                        </c:forEach>--%>
-<%--                    </c:when>--%>
-<%--                    <c:otherwise>--%>
-<%--                        <tr>--%>
-<%--                            <td colspan="4">데이터가 존재하지 않습니다.</td>--%>
-<%--                        </tr>--%>
-<%--                    </c:otherwise>--%>
-<%--                </c:choose>--%>
-<%--                </tbody>--%>
-<%--            </table>--%>
-<%--        </c:otherwise>--%>
-<%--    </c:choose>--%>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<%--    <c:choose>--%>
-<%--        <c:when test="${action == 'register'}">--%>
-<%--            <h3>품목별 등록 수량</h3>--%>
-<%--            <table class="table">--%>
-<%--                <thead>--%>
-<%--                <tr>--%>
-<%--                    <th>제품명</th>--%>
-<%--                    <th>등록 수량</th>--%>
-<%--                </tr>--%>
-<%--                </thead>--%>
-<%--                <tbody>--%>
-<%--                <c:forEach var="product" items="${statistics.register}">--%>
-<%--                    <tr>--%>
-<%--                        <td>${product.key}</td>--%>
-<%--                        <td>${product.value}</td>--%>
-<%--                    </tr>--%>
-<%--                </c:forEach>--%>
-<%--                <c:if test="${empty statistics.register}">--%>
-<%--                    <tr>--%>
-<%--                        <td colspan="2">데이터가 존재하지 않습니다.</td>--%>
-<%--                    </tr>--%>
-<%--                </c:if>--%>
-<%--                </tbody>--%>
-<%--            </table>--%>
-<%--        </c:when>--%>
-<%--        <c:when test="${action == 'add'}">--%>
-<%--            <h3>품목별 입고 수량</h3>--%>
-<%--            <table class="table">--%>
-<%--                <thead>--%>
-<%--                <tr>--%>
-<%--                    <th>제품명</th>--%>
-<%--                    <th>입고 수량</th>--%>
-<%--                </tr>--%>
-<%--                </thead>--%>
-<%--                <tbody>--%>
-<%--                <c:forEach var="product" items="${statistics.add}">--%>
-<%--                    <tr>--%>
-<%--                        <td>${product.key}</td>--%>
-<%--                        <td>${product.value}</td>--%>
-<%--                    </tr>--%>
-<%--                </c:forEach>--%>
-<%--                <c:if test="${empty statistics.add}">--%>
-<%--                    <tr>--%>
-<%--                        <td colspan="2">데이터가 존재하지 않습니다.</td>--%>
-<%--                    </tr>--%>
-<%--                </c:if>--%>
-<%--                </tbody>--%>
-<%--            </table>--%>
-<%--        </c:when>--%>
-<%--        <c:when test="${action == 'sell'}">--%>
-<%--            <h3>품목별 판매 수량</h3>--%>
-<%--            <table class="table">--%>
-<%--                <thead>--%>
-<%--                <tr>--%>
-<%--                    <th>제품명</th>--%>
-<%--                    <th>판매 수량</th>--%>
-<%--                </tr>--%>
-<%--                </thead>--%>
-<%--                <tbody>--%>
-<%--                <c:forEach var="product" items="${statistics.sell}">--%>
-<%--                    <tr>--%>
-<%--                        <td>${product.key}</td>--%>
-<%--                        <td>${-product.value}</td>--%>
-<%--                    </tr>--%>
-<%--                </c:forEach>--%>
-<%--                <c:if test="${empty statistics.sell}">--%>
-<%--                    <tr>--%>
-<%--                        <td colspan="2">데이터가 존재하지 않습니다.</td>--%>
-<%--                    </tr>--%>
-<%--                </c:if>--%>
-<%--                </tbody>--%>
-<%--            </table>--%>
-<%--        </c:when>--%>
-<%--        <c:otherwise>--%>
-<%--            <c:forEach var="entry" items="${groupedLogs}">--%>
-<%--                <c:set var="action" value="${entry.key}" />--%>
-<%--                <c:choose>--%>
-<%--                    <c:when test="${action == 'register'}">--%>
-<%--                        <h3>품목별 등록 수량</h3>--%>
-<%--                        <table class="table">--%>
-<%--                            <thead>--%>
-<%--                            <tr>--%>
-<%--                                <th>제품명</th>--%>
-<%--                                <th>등록 수량</th>--%>
-<%--                            </tr>--%>
-<%--                            </thead>--%>
-<%--                            <tbody>--%>
-<%--                            <c:forEach var="product" items="${statistics.register}">--%>
-<%--                                <tr>--%>
-<%--                                    <td>${product.key}</td>--%>
-<%--                                    <td>${product.value}</td>--%>
-<%--                                </tr>--%>
-<%--                            </c:forEach>--%>
-<%--                            <c:if test="${empty statistics.register}">--%>
-<%--                                <tr>--%>
-<%--                                    <td colspan="2">데이터가 존재하지 않습니다.</td>--%>
-<%--                                </tr>--%>
-<%--                            </c:if>--%>
-<%--                            </tbody>--%>
-<%--                        </table>--%>
-<%--                    </c:when>--%>
-<%--                    <c:when test="${action == 'add'}">--%>
-<%--                        <h3>품목별 입고 수량</h3>--%>
-<%--                        <table class="table">--%>
-<%--                            <thead>--%>
-<%--                            <tr>--%>
-<%--                                <th>제품명</th>--%>
-<%--                                <th>입고 수량</th>--%>
-<%--                            </tr>--%>
-<%--                            </thead>--%>
-<%--                            <tbody>--%>
-<%--                            <c:forEach var="product" items="${statistics.add}">--%>
-<%--                                <tr>--%>
-<%--                                    <td>${product.key}</td>--%>
-<%--                                    <td>${product.value}</td>--%>
-<%--                                </tr>--%>
-<%--                            </c:forEach>--%>
-<%--                            <c:if test="${empty statistics.add}">--%>
-<%--                                <tr>--%>
-<%--                                    <td colspan="2">데이터가 존재하지 않습니다.</td>--%>
-<%--                                </tr>--%>
-<%--                            </c:if>--%>
-<%--                            </tbody>--%>
-<%--                        </table>--%>
-<%--                    </c:when>--%>
-<%--                    <c:when test="${action == 'sell'}">--%>
-<%--                        <h3>품목별 판매 수량</h3>--%>
-<%--                        <table class="table">--%>
-<%--                            <thead>--%>
-<%--                            <tr>--%>
-<%--                                <th>제품명</th>--%>
-<%--                                <th>판매 수량</th>--%>
-<%--                            </tr>--%>
-<%--                            </thead>--%>
-<%--                            <tbody>--%>
-<%--                            <c:forEach var="product" items="${statistics.sell}">--%>
-<%--                                <tr>--%>
-<%--                                    <td>${product.key}</td>--%>
-<%--                                    <td>${-product.value}</td>--%>
-<%--                                </tr>--%>
-<%--                            </c:forEach>--%>
-<%--                            <c:if test="${empty statistics.sell}">--%>
-<%--                                <tr>--%>
-<%--                                    <td colspan="2">데이터가 존재하지 않습니다.</td>--%>
-<%--                                </tr>--%>
-<%--                            </c:if>--%>
-<%--                            </tbody>--%>
-<%--                        </table>--%>
-<%--                    </c:when>--%>
-<%--                </c:choose>--%>
-<%--            </c:forEach>--%>
-<%--        </c:otherwise>--%>
-<%--    </c:choose>--%>
     <c:choose>
-        <c:when test="${action == 'register' || action == 'add' || action == 'all' || action == 'sell'}">
-            <c:choose>
-                <c:when test="${action == 'all'}">
-                    <h3>품목별 등록 수량</h3>
-                    <table class="table">
-                        <thead>
+        <c:when test="${action == 'all'}">
+            <h3>품목별 ${range == 'daily' ? '일일' : range == 'weekly' ? '주간' : range == 'monthly' ? '월간' : '전체'} 등록 수량</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>제품명</th>
+                    <th>구매 가격</th>
+                    <th>등록 수량</th>
+                    <th>지출</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:choose>
+                    <c:when test="${not empty statistics['register']}">
+                        <c:forEach var="product" items="${statistics['register']}">
+                            <tr>
+                                <td>${product.key}</td>
+                                <td>
+                                    <c:set var="productName" value="${product.key}"/>
+                                    <c:set var="purchasePrice" value="0"/>
+                                    <c:forEach var="p" items="${products}">
+                                        <c:if test="${p.name eq productName}">
+                                            <c:set var="purchasePrice" value="${p.purchasePrice}"/>
+                                        </c:if>
+                                    </c:forEach>
+                                        ${purchasePrice}
+                                </td>
+                                <td>${product.value}</td>
+                                <td>${product.value * purchasePrice}</td>
+                            </tr>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
                         <tr>
-                            <th>제품명</th>
-                                <%-- <th>${actionName == 'sell' ? '판매 가격' : '구매 가격'}</th> --%>
-                            <th>등록 수량</th>
-                                <%-- <th>${actionName == 'register' || actionName == 'add' ? '지출' : '수입'}</th> --%>
+                            <td colspan="2">데이터가 존재하지 않습니다.</td>
                         </tr>
-                        </thead>
-                        <tbody>
-                        <c:choose>
-                            <c:when test="${not empty statistics['register']}">
-                                <c:forEach var="product" items="${statistics['register']}">
-                                    <tr>
-                                        <td>${product.key}</td>
-                                            <%-- <td>${actionName == 'sell' ? product.value.price : product.value.purchasePrice}</td> --%>
-                                        <td>${product.value}</td>
-                                            <%-- <td>${product.value.changeBalance}</td> --%>
-                                    </tr>
-                                </c:forEach>
-                            </c:when>
-                            <c:otherwise>
-                                <tr>
-                                    <td colspan="2">데이터가 존재하지 않습니다.</td>
-                                </tr>
-                            </c:otherwise>
-                        </c:choose>
-                        </tbody>
-                    </table>
-                    <h3>품목별 입고 수량</h3>
-                    <table class="table">
-                        <thead>
+                    </c:otherwise>
+                </c:choose>
+                </tbody>
+            </table>
+            <h3>품목별 ${range == 'daily' ? '일일' : range == 'weekly' ? '주간' : range == 'monthly' ? '월간' : '전체'} 입고 수량</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>제품명</th>
+                    <th>구매 가격</th>
+                    <th>입고 수량</th>
+                    <th>지출</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:choose>
+                    <c:when test="${not empty statistics['add']}">
+                        <c:forEach var="product" items="${statistics['add']}">
+                            <tr>
+                                <td>${product.key}</td>
+                                <td>
+                                    <c:set var="productName" value="${product.key}"/>
+                                    <c:set var="purchasePrice" value="0"/>
+                                    <c:forEach var="p" items="${products}">
+                                        <c:if test="${p.name eq productName}">
+                                            <c:set var="purchasePrice" value="${p.purchasePrice}"/>
+                                        </c:if>
+                                    </c:forEach>
+                                        ${purchasePrice}
+                                </td>
+                                <td>${product.value}</td>
+                                <td>${product.value * purchasePrice}</td>
+                            </tr>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
                         <tr>
-                            <th>제품명</th>
-                                <%-- <th>${actionName == 'sell' ? '판매 가격' : '구매 가격'}</th> --%>
-                            <th>입고 수량</th>
-                                <%-- <th>${actionName == 'register' || actionName == 'add' ? '지출' : '수입'}</th> --%>
+                            <td colspan="2">데이터가 존재하지 않습니다.</td>
                         </tr>
-                        </thead>
-                        <tbody>
-                        <c:choose>
-                            <c:when test="${not empty statistics['add']}">
-                                <c:forEach var="product" items="${statistics['add']}">
-                                    <tr>
-                                        <td>${product.key}</td>
-                                            <%-- <td>${actionName == 'sell' ? product.value.price : product.value.purchasePrice}</td> --%>
-                                        <td>${product.value}</td>
-                                            <%-- <td>${product.value.changeBalance}</td> --%>
-                                    </tr>
-                                </c:forEach>
-                            </c:when>
-                            <c:otherwise>
-                                <tr>
-                                    <td colspan="2">데이터가 존재하지 않습니다.</td>
-                                </tr>
-                            </c:otherwise>
-                        </c:choose>
-                        </tbody>
-                    </table>
-                    <h3>품목별 판매 수량</h3>
-                    <table class="table">
-                        <thead>
+                    </c:otherwise>
+                </c:choose>
+                </tbody>
+            </table>
+            <h3>품목별 ${range == 'daily' ? '일일' : range == 'weekly' ? '주간' : range == 'monthly' ? '월간' : '전체'} 판매 수량</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>제품명</th>
+                    <th>판매 가격</th>
+                    <th>판매 수량</th>
+                    <th>총 매출</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:choose>
+                    <c:when test="${not empty statistics['sell']}">
+                        <c:forEach var="product" items="${statistics['sell']}">
+                            <tr>
+                                <td>${product.key}</td>
+                                <td>
+                                    <c:set var="productName" value="${product.key}"/>
+                                    <c:set var="price" value="0"/>
+                                    <c:forEach var="p" items="${products}">
+                                        <c:if test="${p.name eq productName}">
+                                            <c:set var="price" value="${p.price}"/>
+                                        </c:if>
+                                    </c:forEach>
+                                        ${price}
+                                </td>
+                                <td>${-product.value}</td>
+                                <td>${-product.value * price}</td>
+                            </tr>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
                         <tr>
-                            <th>제품명</th>
-                                <%-- <th>${actionName == 'sell' ? '판매 가격' : '구매 가격'}</th> --%>
-                            <th>판매 수량</th>
-                                <%-- <th>${actionName == 'register' || actionName == 'add' ? '지출' : '수입'}</th> --%>
+                            <td colspan="2">데이터가 존재하지 않습니다.</td>
                         </tr>
-                        </thead>
-                        <tbody>
-                        <c:choose>
-                            <c:when test="${not empty statistics['sell']}">
-                                <c:forEach var="product" items="${statistics['sell']}">
-                                    <tr>
-                                        <td>${product.key}</td>
-                                            <%-- <td>${actionName == 'sell' ? product.value.price : product.value.purchasePrice}</td> --%>
-                                        <td>${-product.value}</td>
-                                            <%-- <td>${product.value.changeBalance}</td> --%>
-                                    </tr>
-                                </c:forEach>
-                            </c:when>
-                            <c:otherwise>
-                                <tr>
-                                    <td colspan="2">데이터가 존재하지 않습니다.</td>
-                                </tr>
-                            </c:otherwise>
-                        </c:choose>
-                        </tbody>
-                    </table>
-                </c:when>
-                <c:otherwise>
-                    <h3>품목별 ${action == 'register' ? '등록' : action == 'add' ? '입고' : '판매'} 수량</h3>
-                    <table class="table">
-                        <thead>
+                    </c:otherwise>
+                </c:choose>
+                </tbody>
+            </table>
+        </c:when>
+        <c:otherwise>
+            <h3>품목별 ${range == 'daily' ? '일일' : range == 'weekly' ? '주간' : range == 'monthly' ? '월간' : '전체'} ${action == 'register' ? '등록' : action == 'add' ? '입고' : '판매'} 수량</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>제품명</th>
+                    <th>${action == 'sell' ? '판매 가격' : '구매 가격'}</th>
+                    <th>${action == 'register' ? '등록' : action == 'add' ? '입고' : '판매'} 수량</th>
+                    <th>${action == 'register' || actionName == 'add' ? '지출' : '수입'}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:choose>
+                    <c:when test="${not empty statistics[action]}">
+                        <c:forEach var="product" items="${statistics[action]}">
+                            <c:choose>
+                                <c:when test="${action eq 'register' || action eq 'add'}">
+                                    <td>${product.key}</td>
+                                    <td>
+                                        <c:set var="productName" value="${product.key}"/>
+                                        <c:set var="purchasePrice" value="0"/>
+                                        <c:forEach var="p" items="${products}">
+                                            <c:if test="${p.name eq productName}">
+                                                <c:set var="purchasePrice" value="${p.purchasePrice}"/>
+                                            </c:if>
+                                        </c:forEach>
+                                            ${purchasePrice}
+                                    </td>
+                                    <td>${product.value}</td>
+                                    <td>${product.value * purchasePrice}</td>
+                                </c:when>
+                                <c:otherwise>
+                                    <td>${product.key}</td>
+                                    <td>
+                                        <c:set var="productName" value="${product.key}"/>
+                                        <c:set var="price" value="0"/>
+                                        <c:forEach var="p" items="${products}">
+                                            <c:if test="${p.name eq productName}">
+                                                <c:set var="price" value="${p.price}"/>
+                                            </c:if>
+                                        </c:forEach>
+                                            ${price}
+                                    </td>
+                                    <td>${-product.value}</td>
+                                    <td>${-product.value * price}</td>
+                                </c:otherwise>
+                            </c:choose>
+                            </tr>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
                         <tr>
-                            <th>제품명</th>
-                                <%-- <th>${actionName == 'sell' ? '판매 가격' : '구매 가격'}</th> --%>
-                            <th>${action == 'register' ? '등록' : action == 'add' ? '입고' : '판매'} 수량</th>
-                                <%-- <th>${actionName == 'register' || actionName == 'add' ? '지출' : '수입'}</th> --%>
+                            <td colspan="2">데이터가 존재하지 않습니다.</td>
                         </tr>
-                        </thead>
-                        <tbody>
-                        <c:choose>
-                            <c:when test="${not empty statistics[action]}">
-                                <c:forEach var="product" items="${statistics[action]}">
-                                    <tr>
-                                        <td>${product.key}</td>
-                                            <%-- <td>${actionName == 'sell' ? product.value.price : product.value.purchasePrice}</td> --%>
-                                        <td>${action == 'register' || action == 'add' ? product.value : -product.value}</td>
-                                            <%-- <td>${product.value.changeBalance}</td> --%>
-                                    </tr>
-                                </c:forEach>
-                            </c:when>
-                            <c:otherwise>
-                                <tr>
-                                    <td colspan="2">데이터가 존재하지 않습니다.</td>
-                                </tr>
-                            </c:otherwise>
-                        </c:choose>
-                        </tbody>
-                    </table>
-                </c:otherwise>
-            </c:choose>
+                    </c:otherwise>
+                </c:choose>
+                </tbody>
+            </table>
+        </c:otherwise>
+    </c:choose>
+
+
+    <br><br>
+    <c:choose>
+        <c:when test="${action == 'sell' || action == 'all'}">
+            <c:set var="topProductBySales" value="" />
+            <c:set var="topProductByRevenue" value="" />
+            <c:set var="maxSales" value="0" />
+            <c:set var="maxRevenue" value="0" />
+
+            <c:forEach var="product" items="${statistics['sell']}">
+                <c:if test="${-product.value > maxSales}">
+                    <c:set var="topProductBySales" value="${product.key}" />
+                    <c:set var="maxSales" value="${-product.value}" />
+                </c:if>
+            </c:forEach>
+
+            <c:forEach var="product" items="${statistics['sell']}">
+                <c:set var="price" value="0" />
+                <c:forEach var="p" items="${products}">
+                    <c:if test="${p.name eq product.key}">
+                        <c:set var="price" value="${p.price}" />
+                    </c:if>
+                </c:forEach>
+                <c:set var="revenue" value="${-product.value * price}" />
+                <c:if test="${revenue > maxRevenue}">
+                    <c:set var="topProductByRevenue" value="${product.key}" />
+                    <c:set var="maxRevenue" value="${revenue}" />
+                </c:if>
+            </c:forEach>
+            <h3>최다 판매 품목 : ${empty topProductBySales ? '데이터가 존재하지 않습니다.' : topProductBySales}</h3>
+            <h4>판매 개수 : ${empty maxSales ? '0' : maxSales}</h4>
+            <br>
+            <h3>최고 매출 품목 : ${empty topProductByRevenue ? '데이터가 존재하지 않습니다.' : topProductByRevenue}</h3>
+            <h4>매출액 : ${empty maxRevenue ? '0' : maxRevenue}</h4>
         </c:when>
     </c:choose>
+    <br>
+    <c:choose>
+        <c:when test="${action == 'all'}">
+            <h3>${range == 'daily' ? '일일' : range == 'weekly' ? '주간' : range == 'monthly' ? '월간' : '전체'} 총 매출</h3>
+            <h4></h4>
+        </c:when>
+    </c:choose>
+
 </div>
 </body>
 </html>

@@ -39,6 +39,7 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+    <br>
     <h2>${range == 'daily' ? '일일' : range == 'weekly' ? '주간' : range == 'monthly' ? '월간' : '전체'} ${action == 'register' ? '등록' : action == 'add' ? '입고' : action == 'sell' ? '판매' : '전체'}
         통계</h2>
     <c:choose>
@@ -271,7 +272,7 @@
             </c:choose>
         </c:otherwise>
     </c:choose>
-    <br><br><br>
+    <br><br>
 
 
     <c:choose>
@@ -395,14 +396,16 @@
             </table>
         </c:when>
         <c:otherwise>
-            <h3>품목별 ${range == 'daily' ? '일일' : range == 'weekly' ? '주간' : range == 'monthly' ? '월간' : '전체'} ${action == 'register' ? '등록' : action == 'add' ? '입고' : '판매'} 수량</h3>
+            <h3>
+                품목별 ${range == 'daily' ? '일일' : range == 'weekly' ? '주간' : range == 'monthly' ? '월간' : '전체'} ${action == 'register' ? '등록' : action == 'add' ? '입고' : '판매'}
+                수량</h3>
             <table class="table">
                 <thead>
                 <tr>
                     <th>제품명</th>
                     <th>${action == 'sell' ? '판매 가격' : '구매 가격'}</th>
                     <th>${action == 'register' ? '등록' : action == 'add' ? '입고' : '판매'} 수량</th>
-                    <th>${action == 'register' || actionName == 'add' ? '지출' : '수입'}</th>
+                    <th>${action == 'register' || action == 'add' ? '지출' : '수입'}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -457,47 +460,102 @@
 
 
     <br><br>
-    <c:choose>
-        <c:when test="${action == 'sell' || action == 'all'}">
-            <c:set var="topProductBySales" value="" />
-            <c:set var="topProductByRevenue" value="" />
-            <c:set var="maxSales" value="0" />
-            <c:set var="maxRevenue" value="0" />
+    <%--    <c:choose>--%>
+    <%--        <c:when test="${action == 'sell' || action == 'all'}">--%>
+    <c:set var="topProductBySales" value=""/>
+    <c:set var="topProductByRevenue" value=""/>
+    <c:set var="maxSales" value="0"/>
+    <c:set var="maxRevenue" value="0"/>
 
-            <c:forEach var="product" items="${statistics['sell']}">
-                <c:if test="${-product.value > maxSales}">
-                    <c:set var="topProductBySales" value="${product.key}" />
-                    <c:set var="maxSales" value="${-product.value}" />
+    <c:forEach var="product" items="${statistics['sell']}">
+        <c:if test="${-product.value > maxSales}">
+            <c:set var="topProductBySales" value="${product.key}"/>
+            <c:set var="maxSales" value="${-product.value}"/>
+        </c:if>
+    </c:forEach>
+
+    <c:forEach var="product" items="${statistics['sell']}">
+        <c:set var="price" value="0"/>
+        <c:forEach var="p" items="${products}">
+            <c:if test="${p.name eq product.key}">
+                <c:set var="price" value="${p.price}"/>
+            </c:if>
+        </c:forEach>
+        <c:set var="revenue" value="${-product.value * price}"/>
+        <c:if test="${revenue > maxRevenue}">
+            <c:set var="topProductByRevenue" value="${product.key}"/>
+            <c:set var="maxRevenue" value="${revenue}"/>
+        </c:if>
+    </c:forEach>
+
+
+    <h3>${range == 'daily' ? '일일' : range == 'weekly' ? '주간' : range == 'monthly' ? '월간' : '전체'} ${action == 'register' ? '등록' : action == 'add' ? '입고' : action == 'sell' ? '판매' : '총'}
+        결산</h3>
+    <c:if test="${action == 'sell' || action == 'all'}">
+        <br>
+        <h5>최다 판매 품목 : ${empty topProductBySales ? '데이터가 존재하지 않습니다.' : topProductBySales}</h5>
+        <p>판매 개수 : ${empty maxSales ? '0' : maxSales}</p>
+        <br>
+        <h5>최고 매출 품목 : ${empty topProductByRevenue ? '데이터가 존재하지 않습니다.' : topProductByRevenue}</h5>
+        <p>매출액 : ${empty maxRevenue ? '0' : maxRevenue}</p>
+
+        <br>
+    </c:if>
+    <c:set var="totalRevenue" value="0"/>
+    <c:set var="totalExpense" value="0"/>
+
+
+    <c:if test="${not empty statistics['register']}">
+        <c:forEach var="product" items="${statistics['register']}">
+            <c:set var="purchasePrice" value="0"/>
+            <c:forEach var="p" items="${products}">
+                <c:if test="${p.name eq product.key}">
+                    <c:set var="purchasePrice" value="${p.purchasePrice}"/>
                 </c:if>
             </c:forEach>
-
-            <c:forEach var="product" items="${statistics['sell']}">
-                <c:set var="price" value="0" />
-                <c:forEach var="p" items="${products}">
-                    <c:if test="${p.name eq product.key}">
-                        <c:set var="price" value="${p.price}" />
-                    </c:if>
-                </c:forEach>
-                <c:set var="revenue" value="${-product.value * price}" />
-                <c:if test="${revenue > maxRevenue}">
-                    <c:set var="topProductByRevenue" value="${product.key}" />
-                    <c:set var="maxRevenue" value="${revenue}" />
+            <c:set var="expense" value="${product.value * purchasePrice}"/>
+            <c:set var="totalExpense" value="${totalExpense + expense}"/>
+        </c:forEach>
+    </c:if>
+    <c:if test="${not empty statistics['add']}">
+        <c:forEach var="product" items="${statistics['add']}">
+            <c:set var="purchasePrice" value="0"/>
+            <c:forEach var="p" items="${products}">
+                <c:if test="${p.name eq product.key}">
+                    <c:set var="purchasePrice" value="${p.purchasePrice}"/>
                 </c:if>
             </c:forEach>
-            <h3>최다 판매 품목 : ${empty topProductBySales ? '데이터가 존재하지 않습니다.' : topProductBySales}</h3>
-            <h4>판매 개수 : ${empty maxSales ? '0' : maxSales}</h4>
-            <br>
-            <h3>최고 매출 품목 : ${empty topProductByRevenue ? '데이터가 존재하지 않습니다.' : topProductByRevenue}</h3>
-            <h4>매출액 : ${empty maxRevenue ? '0' : maxRevenue}</h4>
-        </c:when>
-    </c:choose>
-    <br>
-    <c:choose>
-        <c:when test="${action == 'all'}">
-            <h3>${range == 'daily' ? '일일' : range == 'weekly' ? '주간' : range == 'monthly' ? '월간' : '전체'} 총 매출</h3>
-            <h4></h4>
-        </c:when>
-    </c:choose>
+            <c:set var="expense" value="${product.value * purchasePrice}"/>
+            <c:set var="totalExpense" value="${totalExpense + expense}"/>
+        </c:forEach>
+    </c:if>
+    <c:if test="${not empty statistics['sell']}">
+        <c:forEach var="product" items="${statistics['sell']}">
+            <c:set var="price" value="0"/>
+            <c:forEach var="p" items="${products}">
+                <c:if test="${p.name eq product.key}">
+                    <c:set var="price" value="${p.price}"/>
+                </c:if>
+            </c:forEach>
+            <c:set var="revenue" value="${-product.value * price}"/>
+            <c:set var="totalRevenue" value="${totalRevenue + revenue}"/>
+        </c:forEach>
+    </c:if>
+
+
+    <c:if test="${action != 'sell'}">
+        <h5>총 지출: ${totalExpense}</h5>
+    </c:if>
+    <c:if test="${action == 'sell' || action == 'all'}">
+        <h5>총 수입: ${totalRevenue}</h5>
+    </c:if>
+    <c:if test="${action == 'all'}">
+        <h4>합계 : ${totalRevenue - totalExpense}</h4>
+    </c:if>
+
+
+    <%--        </c:when>--%>
+    <%--    </c:choose>--%>
 
 </div>
 </body>

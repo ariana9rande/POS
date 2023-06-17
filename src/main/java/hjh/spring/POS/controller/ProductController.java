@@ -98,8 +98,14 @@ public class ProductController
     }
 
     @GetMapping("/products")
-    public String products(Model model)
+    public String products(Model model, HttpSession session)
     {
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        if(loginMember == null)
+        {
+            model.addAttribute("errorMessage", "권한이 없습니다.");
+            return "/authError";
+        }
         List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
 
@@ -154,6 +160,13 @@ public class ProductController
     @GetMapping("/sell")
     public String productSellForm(Model model, HttpSession session)
     {
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        if(loginMember == null)
+        {
+            model.addAttribute("errorMessage", "권한이 없습니다.");
+            return "/authError";
+        }
+
         List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
 
@@ -298,10 +311,8 @@ public class ProductController
     }
 
     @GetMapping("/deleteAll")
-    public String deleteSaleItemFromSellList(@RequestParam("saleId") Long saleId, HttpSession session, Model model)
+    public String deleteSaleItemFromSellList(@RequestParam("saleId") Long saleId, HttpSession session)
     {
-        Sale sale = (Sale) session.getAttribute("sale");
-
         saleService.deleteAllSaleItems();
         saleService.deleteSale(saleId);
 

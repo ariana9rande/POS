@@ -9,11 +9,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
+<%@ include file="logout.jsp" %>
 <div class="header">
     <h1>Web POS System</h1>
-    <c:if test="${sessionScope.loginMember != null}">
-        <div class="navbar-user">Welcome, ${sessionScope.loginMember.name}</div>
-    </c:if>
 </div>
 <%@ include file="navbar.jsp" %>
 <div class="container">

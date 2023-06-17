@@ -13,6 +13,7 @@
     <title>Statistics</title>
 </head>
 <body>
+<%@ include file="../logout.jsp" %>
 <div class="header">
     <h1>Statistics</h1>
 </div>

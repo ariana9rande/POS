@@ -7,6 +7,7 @@
     <title>판매 완료</title>
 </head>
 <body>
+<%@ include file="logout.jsp" %>
 <div class="header">
     <h1>판매 완료</h1>
 </div>

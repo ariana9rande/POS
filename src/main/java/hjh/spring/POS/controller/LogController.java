@@ -1,9 +1,11 @@
 package hjh.spring.POS.controller;
 
 import hjh.spring.POS.domain.Log;
+import hjh.spring.POS.domain.Member;
 import hjh.spring.POS.domain.Product;
 import hjh.spring.POS.service.LogService;
 import hjh.spring.POS.service.ProductService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,8 +28,14 @@ public class LogController
     }
 
     @GetMapping("/")
-    public String StatisticsForm()
+    public String StatisticsForm(HttpSession session, Model model)
     {
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        if(loginMember == null || !loginMember.getRole().equals("매니저"))
+        {
+            model.addAttribute("errorMessage", "권한이 없습니다.");
+            return "/authError";
+        }
         return "/statistics/statisticsForm";
     }
 

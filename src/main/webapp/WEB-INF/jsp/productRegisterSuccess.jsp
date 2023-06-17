@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
+<%@ include file="logout.jsp" %>
 <div class="header">
     <h1>상품 등록 완료</h1>
 </div>

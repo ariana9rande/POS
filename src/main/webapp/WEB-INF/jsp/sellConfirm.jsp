@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
+<%@ include file="logout.jsp" %>
 <div class="header">
     <h1>Sell</h1>
 </div>

@@ -22,8 +22,14 @@ public class MemberController
     }
 
     @GetMapping("/join")
-    public String signupForm(Model model)
+    public String signupForm(Model model, HttpSession session)
     {
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        if(loginMember != null)
+        {
+            model.addAttribute("errorMessage", "로그아웃 이후 이용해주세요");
+            return "/authError";
+        }
         model.addAttribute("member", new Member());
         return "member/join";
     }
@@ -47,14 +53,21 @@ public class MemberController
     }
 
     @GetMapping("/login")
-    public String loginForm(Model model)
+    public String loginForm(Model model, HttpSession session)
     {
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        if(loginMember != null)
+        {
+            model.addAttribute("errorMessage", "이미 로그인 중입니다.");
+            return "/authError";
+        }
         model.addAttribute("member", new Member());
         return "member/login";
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model, HttpSession session)
+    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model,
+                        HttpSession session)
     {
         Member member = memberService.login(email, password);
         if (member == null)
@@ -64,6 +77,14 @@ public class MemberController
         }
 
         session.setAttribute("loginMember", member);
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session)
+    {
+        session.invalidate();
+
         return "redirect:/";
     }
 }

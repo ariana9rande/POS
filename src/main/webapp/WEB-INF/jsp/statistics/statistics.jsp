@@ -2,6 +2,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="hjh.spring.POS.service.ProductService" %>
 <%@ page import="hjh.spring.POS.repository.ProductRepository" %>
+<%@ page import="hjh.spring.POS.domain.Log" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>

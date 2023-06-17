@@ -64,13 +64,13 @@ public class LogRepositoryImpl implements LogRepository
                 sql = switch (range)
                         {
                             case "daily" ->
-                                    "SELECT log_time, change_stock, change_balance, product_id, action FROM log WHERE DATE(log_time) = DATE(NOW())";
+                                    "SELECT log_time, change_stock, change_balance, product_id, action FROM log WHERE DATE(log_time) = DATE(NOW()) order by log_time asc";
                             case "weekly" ->
-                                    "SELECT log_time, change_stock, change_balance, product_id, action FROM log WHERE log_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 WEEK)";
+                                    "SELECT log_time, change_stock, change_balance, product_id, action FROM log WHERE log_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 WEEK) order by log_time asc";
                             case "monthly" ->
-                                    "SELECT log_time, change_stock, change_balance, product_id, action FROM log WHERE YEAR(log_time) = YEAR(CURRENT_DATE()) AND MONTH(log_time) = MONTH(CURRENT_DATE())";
+                                    "SELECT log_time, change_stock, change_balance, product_id, action FROM log WHERE log_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH) order by log_time asc";
                             case "all" ->
-                                    "SELECT log_time, change_stock, change_balance, product_id, action FROM log";
+                                    "SELECT log_time, change_stock, change_balance, product_id, action FROM log order by log_time asc";
                             default -> sql;
                         };
             }
@@ -79,13 +79,13 @@ public class LogRepositoryImpl implements LogRepository
                 sql = switch (range)
                         {
                             case "daily" ->
-                                    "SELECT log_time, change_stock, change_balance, product_id, action FROM log WHERE action = '" + action + "' AND DATE(log_time) = DATE(NOW())";
+                                    "SELECT log_time, change_stock, change_balance, product_id, action FROM log WHERE action = '" + action + "' AND DATE(log_time) = DATE(NOW()) order by log_time asc";
                             case "weekly" ->
-                                    "SELECT log_time, change_stock, change_balance, product_id, action FROM log WHERE action = '" + action + "' AND log_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 WEEK)";
+                                    "SELECT log_time, change_stock, change_balance, product_id, action FROM log WHERE action = '" + action + "' AND log_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 WEEK) order by log_time asc";
                             case "monthly" ->
-                                    "SELECT log_time, change_stock, change_balance, product_id, action FROM log WHERE action = '" + action + "' AND YEAR(log_time) = YEAR(CURRENT_DATE()) AND MONTH(log_time) = MONTH(CURRENT_DATE())";
+                                    "SELECT log_time, change_stock, change_balance, product_id, action FROM log WHERE action = '" + action + "' AND log_time >= DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH) order by log_time asc";
                             case "all" ->
-                                    "SELECT log_time, change_stock, change_balance, product_id, action FROM log WHERE action = '" + action + "'";
+                                    "SELECT log_time, change_stock, change_balance, product_id, action FROM log WHERE action = '" + action + "' order by log_time asc";
                             default -> sql;
                         };
             }
@@ -116,11 +116,6 @@ public class LogRepositoryImpl implements LogRepository
         return statistics;
     }
 
-    /**
-     * 로그를 액션별로 그룹화하는 메서드
-     * @param logs 로그 리스트
-     * @return 액션별로 그룹화된 로그 맵
-     */
     @Override
     public Map<String, List<Log>> groupLogsByAction(List<Log> logs) {
         // 순서를 유지하기 위해 LinkedHashMap 사용
@@ -131,8 +126,11 @@ public class LogRepositoryImpl implements LogRepository
         List<Log> addLogs = new ArrayList<>();
         List<Log> sellLogs = new ArrayList<>();
 
+        // 리스트 생성 후 productId의 오름차순으로 정렬
+        List<Log> sortedLogs = new ArrayList<>(logs);
+        sortedLogs.sort(Comparator.comparing(log -> log.getProduct().getId()));
         // 로그를 순회하며 해당 액션의 리스트에 추가
-        for (Log log : logs) {
+        for (Log log : sortedLogs) {
             String action = log.getAction();
             if ("register".equals(action)) {
                 registerLogs.add(log);
@@ -151,13 +149,8 @@ public class LogRepositoryImpl implements LogRepository
         return groupedLogs;
     }
 
-    /**
-     * 액션별로 통계를 계산하는 메서드
-     * @param groupedLogs 액션별로 그룹화된 로그 맵
-     * @return 액션별 통계 맵
-     */
     @Override
-    public Map<String, Map<String, Integer>> calculateStatistics(Map<String, List<Log>> groupedLogs)
+    public Map<String, Map<String, Integer>> calculateLogs(Map<String, List<Log>> groupedLogs)
     {
         // 액션별 통계 맵
         Map<String, Map<String, Integer>> statistics = new HashMap<>();

@@ -41,10 +41,11 @@ public class LogController
         List<Log> logs = logService.getLogs(action, range);
 
         // 액션별로 로그 그룹화
-        Map<String, List<Log>> groupedLogs = logService.groupLogsByAction(logs);
+        Map<String, List<Log>> groupedLogs = logService.getGroupLogsByAction(logs);
+
 
         // 액션별 통계 계산
-        Map<String, Map<String, Integer>> statistics = logService.calculateStatistics(groupedLogs);
+        Map<String, Map<String, Integer>> statistics = logService.getCalculatedLogs(groupedLogs);
 
 
         // 모델에 데이터 추가

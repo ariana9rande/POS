@@ -14,5 +14,5 @@ public interface LogRepository
 
     Map<String, List<Log>> groupLogsByAction(List<Log> logs);
 
-    Map<String, Map<String, Integer>> calculateStatistics(Map<String, List<Log>> groupedLogs);
+    Map<String, Map<String, Integer>> calculateLogs(Map<String, List<Log>> groupedLogs);
 }

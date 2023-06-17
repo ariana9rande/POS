@@ -24,13 +24,13 @@ public class LogService
         return logRepository.getLogs(action, range);
     }
 
-    public Map<String, List<Log>> groupLogsByAction(List<Log> logs)
+    public Map<String, List<Log>> getGroupLogsByAction(List<Log> logs)
     {
         return logRepository.groupLogsByAction(logs);
     }
 
-    public Map<String, Map<String, Integer>> calculateStatistics(Map<String, List<Log>> groupedLogs)
+    public Map<String, Map<String, Integer>> getCalculatedLogs(Map<String, List<Log>> groupedLogs)
     {
-        return logRepository.calculateStatistics(groupedLogs);
+        return logRepository.calculateLogs(groupedLogs);
     }
 }

@@ -40,11 +40,11 @@
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
     <br>
-    <h2>${range == 'daily' ? '일일' : range == 'weekly' ? '주간' : range == 'monthly' ? '월간' : '전체'} ${action == 'register' ? '등록' : action == 'add' ? '입고' : action == 'sell' ? '판매' : '전체'}
+    <h2>${range == 'daily' ? '일일' : range == 'weekly' ? '주간' : range == 'monthly' ? '월간' : '전체'} ${action == 'register' ? '등록' : action == 'add' ? '입고' : action == 'sell' ? '판매' : ''}
         통계</h2>
     <c:choose>
         <c:when test="${action == 'all'}">
-            <br><br>
+            <br>
             <h3>${range == 'daily' ? '일일' : range == 'weekly' ? '주간' : range == 'monthly' ? '월간' : '전체'} 등록 통계</h3>
             <table class="table" id="t1">
                 <thead>

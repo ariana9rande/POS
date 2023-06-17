@@ -169,7 +169,7 @@ public class LogRepositoryImpl implements LogRepository
             List<Log> logs = entry.getValue();
 
             // 특정 액션의 통계 맵
-            Map<String, Integer> actionStatistics = new HashMap<>();
+            Map<String, Integer> actionStatistics = new LinkedHashMap<>();
 
             // 로그를 순회하며 통계 계산
             for (Log log : logs)

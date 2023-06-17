@@ -216,10 +216,11 @@ public class SaleRepositoryImpl implements SaleRepository
         return sale;
     }
 
-    public void deleteSaleItem(SaleItem saleItem)
+    public void deleteSaleItem(Long saleItemId)
     {
         Connection conn = null;
         PreparedStatement pstmt = null;
+        SaleItem saleItem = findSaleItemById(saleItemId);
 
         try
         {
@@ -227,6 +228,29 @@ public class SaleRepositoryImpl implements SaleRepository
             String sql = "DELETE FROM sale_item WHERE product_id = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setLong(1, saleItem.getProduct().getId());
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            JdbcConfig.close(pstmt);
+            JdbcConfig.close(conn);
+        }
+    }
+
+    public void deleteAllSaleItems()
+    {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try
+        {
+            conn = JdbcConfig.getConnection();
+            String sql = "DELETE FROM sale_item";
+            pstmt = conn.prepareStatement(sql);
             pstmt.executeUpdate();
         }
         catch (SQLException e)

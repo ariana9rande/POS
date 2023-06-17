@@ -30,8 +30,14 @@ public class ProductController
     }
 
     @GetMapping("/register")
-    public String productManage(Model model)
+    public String productManage(Model model, HttpSession session)
     {
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        if(loginMember == null || !loginMember.getRole().equals("매니저"))
+        {
+            model.addAttribute("errorMessage", "권한이 없습니다.");
+            return "/authError";
+        }
         List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
         return "productRegister";
@@ -101,8 +107,15 @@ public class ProductController
     }
 
     @GetMapping("/add")
-    public String productAddForm(Model model)
+    public String productAddForm(Model model, HttpSession session)
     {
+        Member loginMember = (Member) session.getAttribute("loginMember");
+        if(loginMember == null || !loginMember.getRole().equals("매니저"))
+        {
+            model.addAttribute("errorMessage", "권한이 없습니다.");
+            return "/authError";
+        }
+
         List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
 
@@ -141,19 +154,8 @@ public class ProductController
     @GetMapping("/sell")
     public String productSellForm(Model model, HttpSession session)
     {
-//        // Sale 객체 생성
-//        Sale sale = (Sale) session.getAttribute("sale");
-//        if (sale == null)
-//        {
-//            sale = new Sale();
-//            saleService.saveSale(sale);
-//        }
-
         List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
-
-        // Sale 객체를 세션에 저장
-//        session.setAttribute("sale", sale);
 
         return "sell";
     }
@@ -165,7 +167,6 @@ public class ProductController
                                 HttpSession session,
                                 Model model)
     {
-
         // 세션에서 Sale 객체 가져오기
         Sale sale = (Sale) session.getAttribute("sale");
 
@@ -253,7 +254,7 @@ public class ProductController
     }
 
     @PostMapping("/sellConfirm")
-    public String sellConfirm(HttpSession session, Model model)
+    public String sellConfirm(HttpSession session)
     {
         // 세션에서 Sale 객체 가져오기
         Sale sale = (Sale) session.getAttribute("sale");
@@ -271,7 +272,7 @@ public class ProductController
                 productService.updateProduct(product);
 
                 // SaleItem 삭제
-                saleService.deleteSaleItem(saleItem);
+                saleService.deleteSaleItem(saleItem.getId());
 
                 // Log 객체 생성 및 설정
                 Log log = new Log();
@@ -294,6 +295,19 @@ public class ProductController
         }
 
         return "sellConfirmSuccess";
+    }
+
+    @GetMapping("/deleteAll")
+    public String deleteSaleItemFromSellList(@RequestParam("saleId") Long saleId, HttpSession session, Model model)
+    {
+        Sale sale = (Sale) session.getAttribute("sale");
+
+        saleService.deleteAllSaleItems();
+        saleService.deleteSale(saleId);
+
+        session.removeAttribute("sale");
+
+        return "redirect:/product/sell";
     }
 
 }

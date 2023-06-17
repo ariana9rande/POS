@@ -38,9 +38,14 @@ public class SaleService
         return saleRepository.findFirst();
     }
 
-    public void deleteSaleItem(SaleItem saleItem)
+    public void deleteSaleItem(Long saleItemId)
     {
-        saleRepository.deleteSaleItem(saleItem);
+        saleRepository.deleteSaleItem(saleItemId);
+    }
+
+    public void deleteAllSaleItems()
+    {
+        saleRepository.deleteAllSaleItems();
     }
 
     public void deleteSale(Long saleId)

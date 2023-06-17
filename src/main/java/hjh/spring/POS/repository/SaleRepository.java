@@ -17,7 +17,9 @@ public interface SaleRepository
 
     Sale findFirst();
 
-    void deleteSaleItem(SaleItem saleItem);
+    void deleteSaleItem(Long saleItemId);
+
+    void deleteAllSaleItems();
 
     void deleteSaleById(Long saleId);
 }

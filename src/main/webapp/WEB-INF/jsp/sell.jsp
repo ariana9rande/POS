@@ -39,6 +39,9 @@
             <th>Product</th>
             <th>Quantity</th>
             <th>Price</th>
+            <c:if test="${not empty sale}">
+                <a href="/product/deleteAll?saleId=${sale.id}" class="btn btn-danger">Clear</a>
+            </c:if>
         </tr>
         </thead>
         <tbody>
@@ -47,20 +50,17 @@
                 <td>${saleItem.product.name}</td>
                 <td>${saleItem.quantity}</td>
                 <td>${saleItem.product.price * saleItem.quantity}</td>
-                <td>
-<%--                    <a href="/product/removeFromSellList?saleItemId=${saleItem.id}" class="btn btn-danger">Remove</a>--%>
-                </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
     <table class="table">
         <tbody>
-            <tr>
-                <th>Total Price</th>
-                <th></th>
-                <th>${sale.totalPrice}</th>
-            </tr>
+        <tr>
+            <th>Total Price</th>
+            <th></th>
+            <th>${sale.totalPrice}</th>
+        </tr>
         </tbody>
     </table>
 </div>

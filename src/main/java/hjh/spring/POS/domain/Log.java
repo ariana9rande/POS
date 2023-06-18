@@ -20,14 +20,6 @@ public class Log
 
     }
 
-    public Log(Product product, int changeStock, int changeBalance, Timestamp timestamp)
-    {
-        this.product = product;
-        this.changeStock = changeStock;
-        this.changeBalance = changeBalance;
-        this.timestamp = timestamp;
-    }
-
     public Log(String action, Product product, int changeStock, int changeBalance, Timestamp timestamp)
     {
         this.action = action;

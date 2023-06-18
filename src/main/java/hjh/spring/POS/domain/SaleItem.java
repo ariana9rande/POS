@@ -1,6 +1,8 @@
 package hjh.spring.POS.domain;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 public class SaleItem
 {
@@ -9,12 +11,6 @@ public class SaleItem
     private Sale sale;
     private Product product;
     private int quantity;
-
-    public SaleItem(Product product, int quantity)
-    {
-        this.product = product;
-        this.quantity = quantity;
-    }
 
     public SaleItem()
     {

@@ -3,10 +3,8 @@ package hjh.spring.POS.repository;
 import hjh.spring.POS.configuration.JdbcConfig;
 import hjh.spring.POS.domain.Log;
 import hjh.spring.POS.service.ProductService;
-import org.springframework.boot.autoconfigure.batch.BatchProperties;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.*;
 
 public class LogRepositoryImpl implements LogRepository
@@ -100,7 +98,9 @@ public class LogRepositoryImpl implements LogRepository
                 Long productId = rs.getLong("product_id");
                 String actionType = rs.getString("action");
 
-                statistics.add(new Log(actionType, productService.findProductById(productId), sumChangeStock, sumChangeBalance, logTime));
+                statistics.add(
+                        new Log(actionType, productService.findProductById(productId), sumChangeStock, sumChangeBalance,
+                                logTime));
             }
         }
         catch (SQLException e)
@@ -117,31 +117,35 @@ public class LogRepositoryImpl implements LogRepository
     }
 
     @Override
-    public Map<String, List<Log>> groupLogsByAction(List<Log> logs) {
-        // 순서를 유지하기 위해 LinkedHashMap 사용
+    public Map<String, List<Log>> groupLogsByAction(List<Log> logs)
+    {
+
         Map<String, List<Log>> groupedLogs = new LinkedHashMap<>();
 
-        // 각각의 액션에 대한 리스트 생성
         List<Log> registerLogs = new ArrayList<>();
         List<Log> addLogs = new ArrayList<>();
         List<Log> sellLogs = new ArrayList<>();
 
-        // 리스트 생성 후 productId의 오름차순으로 정렬
         List<Log> sortedLogs = new ArrayList<>(logs);
         sortedLogs.sort(Comparator.comparing(log -> log.getProduct().getId()));
-        // 로그를 순회하며 해당 액션의 리스트에 추가
-        for (Log log : sortedLogs) {
+
+        for (Log log : sortedLogs)
+        {
             String action = log.getAction();
-            if ("register".equals(action)) {
+            if ("register".equals(action))
+            {
                 registerLogs.add(log);
-            } else if ("add".equals(action)) {
+            }
+            else if ("add".equals(action))
+            {
                 addLogs.add(log);
-            } else if ("sell".equals(action)) {
+            }
+            else if ("sell".equals(action))
+            {
                 sellLogs.add(log);
             }
         }
 
-        // 원하는 순서대로 리스트를 groupedLogs 맵에 추가
         groupedLogs.put("register", registerLogs);
         groupedLogs.put("add", addLogs);
         groupedLogs.put("sell", sellLogs);
@@ -152,19 +156,15 @@ public class LogRepositoryImpl implements LogRepository
     @Override
     public Map<String, Map<String, Integer>> calculateLogs(Map<String, List<Log>> groupedLogs)
     {
-        // 액션별 통계 맵
         Map<String, Map<String, Integer>> statistics = new HashMap<>();
 
-        // 액션별로 순회하며 통계 계산
         for (Map.Entry<String, List<Log>> entry : groupedLogs.entrySet())
         {
             String action = entry.getKey();
             List<Log> logs = entry.getValue();
 
-            // 특정 액션의 통계 맵
             Map<String, Integer> actionStatistics = new LinkedHashMap<>();
 
-            // 로그를 순회하며 통계 계산
             for (Log log : logs)
             {
                 String productName = log.getProduct().getName();
@@ -172,7 +172,6 @@ public class LogRepositoryImpl implements LogRepository
                 actionStatistics.put(productName, actionStatistics.getOrDefault(productName, 0) + changeAmount);
             }
 
-            // 액션별 통계 맵에 추가
             statistics.put(action, actionStatistics);
         }
 

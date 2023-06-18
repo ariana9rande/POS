@@ -3,7 +3,8 @@ package hjh.spring.POS.service;
 import hjh.spring.POS.domain.Log;
 import hjh.spring.POS.repository.LogRepository;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 public class LogService
 {

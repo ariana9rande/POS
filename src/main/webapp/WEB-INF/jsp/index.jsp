@@ -7,6 +7,7 @@
     <title>Index Page</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
 </head>
 <body>
 <%@ include file="logout.jsp" %>
@@ -30,7 +31,6 @@
         currentTimeElement.innerHTML = "Current Time: " + currentTime.toLocaleString();
     }
 
-    // 매 초마다 현재 시간 업데이트
     setInterval(updateCurrentTime, 1000);
 </script>
 </body>

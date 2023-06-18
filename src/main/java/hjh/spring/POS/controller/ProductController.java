@@ -66,14 +66,12 @@ public class ProductController
             }
         }
 
-        // Product 객체 생성
         Product product = new Product();
         product.setName(name);
         product.setPrice(price);
         product.setStock(stock);
         product.setPurchasePrice((int)(price * 0.3));
 
-        // ProductService를 통해 상품 등록
         productService.registerProduct(product);
         model.addAttribute("product", product);
 
@@ -81,7 +79,6 @@ public class ProductController
         balance.setAmount(balance.getAmount() - product.getPurchasePrice() * stock);
         balanceService.updateBalance(balance);
 
-        // Log 객체 생성 및 설정
         Log log = new Log();
         log.setAction("register");
         log.setProduct(product);
@@ -90,10 +87,8 @@ public class ProductController
 
         logService.saveLog(log);
 
-        // 세션에 balance 전달
         session.setAttribute("balance", balance);
 
-        // 등록 후 리다이렉트할 경로 반환 (예: 메인 페이지로 이동)
         return "productRegisterSuccess";
     }
 
@@ -140,7 +135,6 @@ public class ProductController
         balance.setAmount(balance.getAmount() - product.getPurchasePrice() * quantity);
         balanceService.updateBalance(balance);
 
-        // Log 객체 생성 및 설정
         Log log = new Log();
         log.setAction("add");
         log.setProduct(product);
@@ -180,10 +174,8 @@ public class ProductController
                                 HttpSession session,
                                 Model model)
     {
-        // 세션에서 Sale 객체 가져오기
         Sale sale = (Sale) session.getAttribute("sale");
 
-        // Sale 객체가 없을 경우 새로 생성
         if (sale == null)
         {
             sale = new Sale();
@@ -191,7 +183,6 @@ public class ProductController
             session.setAttribute("sale", sale);
         }
 
-        // 상품 정보 가져오기
         Product product = productService.findProductById(productId);
 
         boolean saleItemExists = false;
@@ -204,11 +195,9 @@ public class ProductController
                     model.addAttribute("error", "입력한 수량이 상품의 재고를 초과합니다.");
                     List<Product> products = productService.getAllProducts();
                     model.addAttribute("products", products);
-                    // 모델에 Sale 객체 추가
                     model.addAttribute("sale", sale);
                     return "sell";
                 }
-                // 이미 같은 상품을 가지는 SaleItem이 있을 경우 수량 업데이트
                 saleItem.setQuantity(saleItem.getQuantity() + quantity);
                 saleService.updateSaleItem(saleItem);
                 saleItemExists = true;
@@ -218,17 +207,13 @@ public class ProductController
 
         if (quantity > product.getStock())
         {
-            // 재고(stock)를 초과하는 수량이 입력된 경우, 에러 메시지를 모델에 추가하고 다시 sell 페이지로 이동
             model.addAttribute("error", "입력한 수량이 상품의 재고를 초과합니다.");
-            // 모델에 상품 목록 추가
             List<Product> products = productService.getAllProducts();
             model.addAttribute("products", products);
-            // 모델에 Sale 객체 추가
             model.addAttribute("sale", sale);
             return "sell";
         }
 
-        // SaleItem이 없을 경우 새로 생성
         if (!saleItemExists)
         {
             SaleItem saleItem = new SaleItem();
@@ -237,7 +222,6 @@ public class ProductController
             saleItem.setQuantity(quantity);
             saleService.saveSaleItem(saleItem, sale.getId());
 
-            // Sale 객체에 SaleItem 추가
             sale.addSaleItem(saleItem);
         }
 
@@ -245,11 +229,9 @@ public class ProductController
         sale.calculateTotalPrice();
         saleService.updateSale(sale);
 
-        // 모델에 상품 목록 추가
         List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
 
-        // 모델에 Sale 객체 추가
         model.addAttribute("sale", sale);
 
         return "sell";
@@ -269,10 +251,8 @@ public class ProductController
     @PostMapping("/sellConfirm")
     public String sellConfirm(HttpSession session)
     {
-        // 세션에서 Sale 객체 가져오기
         Sale sale = (Sale) session.getAttribute("sale");
 
-        // Sale 객체가 null이 아니라면 SaleItem을 판매 처리하고 Product의 stock을 업데이트
         if (sale != null)
         {
             for (SaleItem saleItem : sale.getSaleItems())
@@ -280,14 +260,11 @@ public class ProductController
                 Product product = saleItem.getProduct();
                 int quantity = saleItem.getQuantity();
 
-                // Product의 stock 업데이트
                 product.setStock(product.getStock() - quantity);
                 productService.updateProduct(product);
 
-                // SaleItem 삭제
                 saleService.deleteSaleItem(saleItem.getId());
 
-                // Log 객체 생성 및 설정
                 Log log = new Log();
                 log.setAction("sell");
                 log.setProduct(product);
@@ -301,7 +278,6 @@ public class ProductController
             balance.setAmount(balance.getAmount() + sale.getTotalPrice());
             balanceService.updateBalance(balance);
 
-            // Sale 객체 삭제
             saleService.deleteSale(sale.getId());
 
             session.setAttribute("balance", balance);

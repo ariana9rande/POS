@@ -31,7 +31,7 @@ public class LogController
     public String StatisticsForm(HttpSession session, Model model)
     {
         Member loginMember = (Member) session.getAttribute("loginMember");
-        if(loginMember == null || !loginMember.getRole().equals("매니저"))
+        if (loginMember == null || !loginMember.getRole().equals("매니저"))
         {
             model.addAttribute("errorMessage", "권한이 없습니다.");
             return "/authError";
@@ -45,18 +45,13 @@ public class LogController
                              Model model)
     {
         List<Product> products = productService.getAllProducts();
-        // 로그 가져오기
+
         List<Log> logs = logService.getLogs(action, range);
 
-        // 액션별로 로그 그룹화
         Map<String, List<Log>> groupedLogs = logService.getGroupLogsByAction(logs);
 
-
-        // 액션별 통계 계산
         Map<String, Map<String, Integer>> statistics = logService.getCalculatedLogs(groupedLogs);
 
-
-        // 모델에 데이터 추가
         model.addAttribute("logs", logs);
         model.addAttribute("action", action);
         model.addAttribute("range", range);

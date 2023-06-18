@@ -19,14 +19,6 @@ public class Member
     {
     }
 
-    public Member(String email, String password, String name, String role)
-    {
-        this.email = email;
-        this.name = name;
-        this.password = password;
-        this.role = role;
-    }
-
     public Long getId()
     {
         return id;

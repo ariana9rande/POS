@@ -12,11 +12,6 @@ public class BalanceService
         this.balanceRepository = balanceRepository;
     }
 
-    public Balance findBalanceById(Long balanceId)
-    {
-        return balanceRepository.findBalanceById(balanceId);
-    }
-
     public Balance findFirstBalance()
     {
         return balanceRepository.findFirst();

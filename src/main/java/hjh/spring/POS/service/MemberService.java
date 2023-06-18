@@ -1,10 +1,7 @@
 package hjh.spring.POS.service;
 
 import hjh.spring.POS.domain.Member;
-import hjh.spring.POS.domain.Product;
 import hjh.spring.POS.repository.MemberRepository;
-
-import java.util.List;
 
 public class MemberService
 {

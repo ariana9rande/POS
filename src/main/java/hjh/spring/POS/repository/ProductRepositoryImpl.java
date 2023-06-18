@@ -1,10 +1,8 @@
 package hjh.spring.POS.repository;
 
 import hjh.spring.POS.configuration.JdbcConfig;
-import hjh.spring.POS.domain.Member;
 import hjh.spring.POS.domain.Product;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +28,6 @@ public class ProductRepositoryImpl implements ProductRepository
 
             pstmt.executeUpdate();
 
-            // 생성된 Product의 ID 가져오기
             ResultSet generatedKeys = pstmt.getGeneratedKeys();
             if (generatedKeys.next())
             {

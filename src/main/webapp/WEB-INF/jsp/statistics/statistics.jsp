@@ -1,15 +1,10 @@
-<%@ page import="hjh.spring.POS.domain.Product" %>
-<%@ page import="java.util.List" %>
-<%@ page import="hjh.spring.POS.service.ProductService" %>
-<%@ page import="hjh.spring.POS.repository.ProductRepository" %>
-<%@ page import="hjh.spring.POS.domain.Log" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
     <title>Statistics</title>
 </head>
 <body>
@@ -463,8 +458,6 @@
 
 
     <br><br>
-    <%--    <c:choose>--%>
-    <%--        <c:when test="${action == 'sell' || action == 'all'}">--%>
     <c:set var="topProductBySales" value=""/>
     <c:set var="topProductByRevenue" value=""/>
     <c:set var="maxSales" value="0"/>
@@ -555,10 +548,6 @@
     <c:if test="${action == 'all'}">
         <h4>합계 : ${totalRevenue - totalExpense}</h4>
     </c:if>
-
-
-    <%--        </c:when>--%>
-    <%--    </c:choose>--%>
 
 </div>
 </body>

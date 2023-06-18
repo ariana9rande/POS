@@ -10,19 +10,13 @@ public class Sale
 {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    List<SaleItem> saleItems = new ArrayList<>();
+    List<SaleItem> saleItems;
     private int totalPrice;
 
     public Sale()
     {
         this.saleItems = new ArrayList<>();
         this.totalPrice = 0;
-    }
-
-    public Sale(List<SaleItem> saleItems, int totalPrice)
-    {
-        this.saleItems = saleItems;
-        this.totalPrice = totalPrice;
     }
 
     public void addSaleItem(SaleItem saleItem)

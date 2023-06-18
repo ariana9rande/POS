@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Product Register</title>
+    <title>Product Add</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
@@ -12,7 +12,7 @@
 <body>
 <%@ include file="logout.jsp" %>
 <div class="header">
-    <h1>Product Register</h1>
+    <h1>Product Add</h1>
 </div>
 <%@ include file="navbar.jsp" %>
 <div class="container">
@@ -29,6 +29,7 @@
         <div class="form-group">
             <label for="quantity">Quantity</label>
             <input type="number" id="quantity" name="quantity" class="form-control" required>
+            <p>${error}</p>
         </div>
         <button type="submit" class="btn btn-primary">Add Stock</button>
     </form>

@@ -53,6 +53,7 @@ public class ProductController
     )
     {
         List<Product> products = productService.getAllProducts();
+        Balance balance = balanceService.findFirstBalance();
 
         if (name != null)
         {
@@ -73,10 +74,17 @@ public class ProductController
         product.setStock(stock);
         product.setPurchasePrice((int) (price * 0.3));
 
+        if(product.getPurchasePrice() * stock > balance.getAmount())
+        {
+            model.addAttribute("error", "잔고가 부족합니다.");
+            model.addAttribute("products", products);
+            return "productRegister";
+        }
+
         productService.registerProduct(product);
         model.addAttribute("product", product);
 
-        Balance balance = balanceService.findFirstBalance();
+
         balance.setAmount(balance.getAmount() - product.getPurchasePrice() * stock);
         balanceService.updateBalance(balance);
 
@@ -129,10 +137,18 @@ public class ProductController
                              @RequestParam("quantity") int quantity,
                              Model model, HttpSession session)
     {
-        productService.addProductStock(productId, quantity);
+        List<Product> products = productService.getAllProducts();
         Product product = productService.findProductById(productId);
-
         Balance balance = balanceService.findFirstBalance();
+
+        if(product.getPurchasePrice() * quantity > balance.getAmount())
+        {
+            model.addAttribute("error", "잔고가 부족합니다.");
+            model.addAttribute("products", products);
+            return "productAdd";
+        }
+
+        productService.addProductStock(productId, quantity);
         balance.setAmount(balance.getAmount() - product.getPurchasePrice() * quantity);
         balanceService.updateBalance(balance);
 

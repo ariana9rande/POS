@@ -31,7 +31,7 @@
             <input type="number" id="quantity" name="quantity" class="form-control" required>
             <p style="color:red;">${error}</p>
         </div>
-        <button type="submit" class="btn btn-primary">Add To Sell List</button>
+        <button type="submit" class="btn btn-primary">추가</button>
         <a href="/product/sellConfirm" class="btn btn-primary">판매</a>
     </form>
     <br>
@@ -42,7 +42,9 @@
             <th>Quantity</th>
             <th>Price</th>
             <c:if test="${not empty sale}">
-                <a href="/product/deleteAll?saleId=${sale.id}" class="btn btn-danger">Clear</a>
+                <th>
+                    <a href="/product/deleteAll?saleId=${sale.id}" class="btn btn-danger">Clear</a>
+                </th>
             </c:if>
         </tr>
         </thead>

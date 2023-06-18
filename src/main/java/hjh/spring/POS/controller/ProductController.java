@@ -21,7 +21,8 @@ public class ProductController
     private final BalanceService balanceService;
     private final LogService logService;
 
-    public ProductController(ProductService productService, SaleService saleService, BalanceService balanceService, LogService logService)
+    public ProductController(ProductService productService, SaleService saleService, BalanceService balanceService,
+                             LogService logService)
     {
         this.productService = productService;
         this.saleService = saleService;
@@ -30,10 +31,10 @@ public class ProductController
     }
 
     @GetMapping("/register")
-    public String productManage(Model model, HttpSession session)
+    public String registerProductForm(Model model, HttpSession session)
     {
         Member loginMember = (Member) session.getAttribute("loginMember");
-        if(loginMember == null || !loginMember.getRole().equals("매니저"))
+        if (loginMember == null || !loginMember.getRole().equals("매니저"))
         {
             model.addAttribute("errorMessage", "권한이 없습니다.");
             return "/authError";
@@ -70,7 +71,7 @@ public class ProductController
         product.setName(name);
         product.setPrice(price);
         product.setStock(stock);
-        product.setPurchasePrice((int)(price * 0.3));
+        product.setPurchasePrice((int) (price * 0.3));
 
         productService.registerProduct(product);
         model.addAttribute("product", product);
@@ -96,7 +97,7 @@ public class ProductController
     public String products(Model model, HttpSession session)
     {
         Member loginMember = (Member) session.getAttribute("loginMember");
-        if(loginMember == null)
+        if (loginMember == null)
         {
             model.addAttribute("errorMessage", "권한이 없습니다.");
             return "/authError";
@@ -108,10 +109,10 @@ public class ProductController
     }
 
     @GetMapping("/add")
-    public String productAddForm(Model model, HttpSession session)
+    public String addProductForm(Model model, HttpSession session)
     {
         Member loginMember = (Member) session.getAttribute("loginMember");
-        if(loginMember == null || !loginMember.getRole().equals("매니저"))
+        if (loginMember == null || !loginMember.getRole().equals("매니저"))
         {
             model.addAttribute("errorMessage", "권한이 없습니다.");
             return "/authError";
@@ -124,7 +125,7 @@ public class ProductController
     }
 
     @PostMapping("/add")
-    public String productAdd(@RequestParam("productId") Long productId,
+    public String addProduct(@RequestParam("productId") Long productId,
                              @RequestParam("quantity") int quantity,
                              Model model, HttpSession session)
     {
@@ -152,10 +153,10 @@ public class ProductController
     }
 
     @GetMapping("/sell")
-    public String productSellForm(Model model, HttpSession session)
+    public String addToSellListForm(Model model, HttpSession session)
     {
         Member loginMember = (Member) session.getAttribute("loginMember");
-        if(loginMember == null)
+        if (loginMember == null)
         {
             model.addAttribute("errorMessage", "권한이 없습니다.");
             return "/authError";

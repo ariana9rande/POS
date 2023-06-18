@@ -7,10 +7,6 @@
     <title>로그인</title>
 </head>
 <body>
-<%--<div class="header">--%>
-<%--    <h1>Login</h1>--%>
-<%--</div>--%>
-<%--<%@ include file="../navbar.jsp" %>--%>
 <div class="container">
     <h1 class="mt-5">로그인</h1>
     <form action="/member/login" method="post">
@@ -24,7 +20,10 @@
             <input type="password" id="password" name="password" class="form-control" required>
         </div>
 
+        <div class="btn-group">
         <input type="submit" value="로그인" class="btn btn-primary">
+            <a href="/member/join" class="btn btn-primary">회원가입</a>
+        </div>
     </form>
     <div>
         ${loginFailed}

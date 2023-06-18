@@ -11,11 +11,12 @@
 <div class="header">
     <h1>회원 가입 성공</h1>
 </div>
-<%@ include file="../navbar.jsp" %>
+<%--<%@ include file="../navbar.jsp" %>--%>
 <div class="container">
     <div>
         <h3>${member.name}님, 환영합니다.</h3>
     </div>
+    <a href="/" class="btn btn-primary">처음으로</a>
 </div>
 </body>
 </html>

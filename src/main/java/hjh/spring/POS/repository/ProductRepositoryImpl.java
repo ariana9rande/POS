@@ -1,7 +1,7 @@
 package hjh.spring.POS.repository;
 
 import hjh.spring.POS.configuration.JdbcConfig;
-import hjh.spring.POS.domain.Product;
+import hjh.spring.POS.model.Product;
 
 import java.sql.*;
 import java.util.ArrayList;

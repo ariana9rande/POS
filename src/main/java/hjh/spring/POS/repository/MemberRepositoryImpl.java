@@ -1,7 +1,7 @@
 package hjh.spring.POS.repository;
 
 import hjh.spring.POS.configuration.JdbcConfig;
-import hjh.spring.POS.domain.Member;
+import hjh.spring.POS.model.Member;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

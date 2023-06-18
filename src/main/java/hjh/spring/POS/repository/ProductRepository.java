@@ -1,6 +1,6 @@
 package hjh.spring.POS.repository;
 
-import hjh.spring.POS.domain.Product;
+import hjh.spring.POS.model.Product;
 
 import java.util.List;
 

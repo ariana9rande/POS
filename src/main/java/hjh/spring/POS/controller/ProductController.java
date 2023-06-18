@@ -1,6 +1,6 @@
 package hjh.spring.POS.controller;
 
-import hjh.spring.POS.domain.*;
+import hjh.spring.POS.model.*;
 import hjh.spring.POS.service.BalanceService;
 import hjh.spring.POS.service.LogService;
 import hjh.spring.POS.service.ProductService;

@@ -1,7 +1,7 @@
 package hjh.spring.POS.repository;
 
 import hjh.spring.POS.configuration.JdbcConfig;
-import hjh.spring.POS.domain.Log;
+import hjh.spring.POS.model.Log;
 import hjh.spring.POS.service.ProductService;
 
 import java.sql.*;

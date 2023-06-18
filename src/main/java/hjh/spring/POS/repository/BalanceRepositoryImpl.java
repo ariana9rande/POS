@@ -1,7 +1,7 @@
 package hjh.spring.POS.repository;
 
 import hjh.spring.POS.configuration.JdbcConfig;
-import hjh.spring.POS.domain.Balance;
+import hjh.spring.POS.model.Balance;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

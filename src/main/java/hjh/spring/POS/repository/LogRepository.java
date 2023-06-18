@@ -1,6 +1,6 @@
 package hjh.spring.POS.repository;
 
-import hjh.spring.POS.domain.Log;
+import hjh.spring.POS.model.Log;
 
 import java.util.List;
 import java.util.Map;

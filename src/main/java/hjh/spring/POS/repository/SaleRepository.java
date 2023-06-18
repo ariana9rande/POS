@@ -1,7 +1,7 @@
 package hjh.spring.POS.repository;
 
-import hjh.spring.POS.domain.Sale;
-import hjh.spring.POS.domain.SaleItem;
+import hjh.spring.POS.model.Sale;
+import hjh.spring.POS.model.SaleItem;
 
 public interface SaleRepository
 {

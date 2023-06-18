@@ -1,6 +1,6 @@
 package hjh.spring.POS.repository;
 
-import hjh.spring.POS.domain.Member;
+import hjh.spring.POS.model.Member;
 
 public interface MemberRepository
 {

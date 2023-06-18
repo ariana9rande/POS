@@ -1,6 +1,6 @@
 package hjh.spring.POS.service;
 
-import hjh.spring.POS.domain.Balance;
+import hjh.spring.POS.model.Balance;
 import hjh.spring.POS.repository.BalanceRepository;
 
 public class BalanceService

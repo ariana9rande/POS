@@ -1,6 +1,6 @@
 package hjh.spring.POS.repository;
 
-import hjh.spring.POS.domain.Balance;
+import hjh.spring.POS.model.Balance;
 
 public interface BalanceRepository
 {

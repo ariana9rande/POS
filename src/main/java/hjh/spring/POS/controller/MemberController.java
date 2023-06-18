@@ -1,6 +1,6 @@
 package hjh.spring.POS.controller;
 
-import hjh.spring.POS.domain.Member;
+import hjh.spring.POS.model.Member;
 import hjh.spring.POS.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;

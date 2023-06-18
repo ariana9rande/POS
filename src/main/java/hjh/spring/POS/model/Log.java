@@ -1,4 +1,4 @@
-package hjh.spring.POS.domain;
+package hjh.spring.POS.model;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

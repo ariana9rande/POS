@@ -1,8 +1,8 @@
 package hjh.spring.POS.controller;
 
-import hjh.spring.POS.domain.Log;
-import hjh.spring.POS.domain.Member;
-import hjh.spring.POS.domain.Product;
+import hjh.spring.POS.model.Log;
+import hjh.spring.POS.model.Member;
+import hjh.spring.POS.model.Product;
 import hjh.spring.POS.service.LogService;
 import hjh.spring.POS.service.ProductService;
 import jakarta.servlet.http.HttpSession;

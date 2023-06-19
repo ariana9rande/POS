@@ -19,7 +19,7 @@
     <h1>${product.name} 입고 완료</h1>
     <h3>${quantity}개 추가</h3>
     <h4>총 소요 비용 ${product.purchasePrice * quantity}</h4>
-    <h4>현재 재고 : ${product.stock}</h4>
+    <h4>현재 재고 : ${product.stock + quantity}</h4>
 </div>
 </body>
 </html>
